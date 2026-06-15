@@ -4,7 +4,7 @@ import { SignUp } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Check, Database, LayoutTemplate, Activity, BrainCircuit } from "lucide-react"
+import { Check, Database, LayoutTemplate, Activity, BrainCircuit, ArrowLeft } from "lucide-react"
 
 const CascadeAnimation = () => {
   return (
@@ -115,8 +115,12 @@ export default function SignUpPage() {
       {/* Left side - Auth component */}
       <div className="relative z-10 flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-32 bg-background border-r border-border/40 shadow-[10px_0_50px_rgba(0,0,0,0.5)] overflow-y-auto">
         <div className="mx-auto w-full max-w-sm lg:w-[400px] py-12">
+          <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-8">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to home
+          </Link>
           <div className="mb-10">
-            <Link href="/" className="flex items-center gap-3 group w-fit">
+            <div className="flex items-center gap-3 group w-fit">
               <div className="relative">
                 <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full group-hover:bg-cyan-500/30 transition-colors" />
                 <div className="w-8 h-8 rounded-lg bg-card/50 border border-cyan-500/30 flex items-center justify-center shadow-lg backdrop-blur-md">
@@ -129,14 +133,17 @@ export default function SignUpPage() {
               <span className="text-xl font-bold tracking-tight">
                 BLACK<span className="text-cyan-400">OUT</span>
               </span>
-            </Link>
+            </div>
           </div>
 
           <SignUp 
             appearance={{
+              baseTheme: dark,
               variables: {
                 colorPrimary: '#06b6d4',
                 colorBackground: 'transparent',
+                colorText: 'white',
+                colorTextSecondary: '#a1a1aa',
                 colorDanger: '#ef4444',
                 colorSuccess: '#22c55e',
                 colorWarning: '#f59e0b',
