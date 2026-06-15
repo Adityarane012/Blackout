@@ -5,18 +5,18 @@
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\next-env.d.ts": {
-    "mtime": 1779192936.5214522,
+    "mtime": 1781518478.6432955,
     "ast_hash": "29f60a376e12bf72b67d4994fcc84214",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\next.config.mjs": {
-    "mtime": 1779136250.0,
-    "ast_hash": "ba3a02d93c14e6c3cc9f43f14a6d5d40",
+    "mtime": 1781518519.8293881,
+    "ast_hash": "9d496f11c47a09789e943ed8b8a28134",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\package.json": {
-    "mtime": 1779135812.0,
-    "ast_hash": "706575b2e71e2d5b4532f93315f0293d",
+    "mtime": 1781504850.799146,
+    "ast_hash": "48c2896ab047333545b2a138dabbeb9e",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\postcss.config.mjs": {
@@ -30,23 +30,23 @@
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\layout.tsx": {
-    "mtime": 1779135812.0,
-    "ast_hash": "a0c70112d3343033c6d4ae4f723be378",
+    "mtime": 1781508700.0549695,
+    "ast_hash": "01618671e9afa11effdaa2efcffdc59e",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\page.tsx": {
-    "mtime": 1779135812.0,
-    "ast_hash": "9870e5eb5698216af35e370324d19cee",
+    "mtime": 1781498337.5010278,
+    "ast_hash": "08f6de7d132e8c7aa2195a658296ba9b",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\simulator\\page.tsx": {
-    "mtime": 1779790768.9912136,
-    "ast_hash": "1e3b41f200bda32fb6c79be6599a7bef",
+    "mtime": 1781509930.276479,
+    "ast_hash": "8642db774d5448289580dd805877dd24",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\event-log.tsx": {
-    "mtime": 1779135812.0,
-    "ast_hash": "60380ccd72d765afda060f151ca24877",
+    "mtime": 1781509994.9905367,
+    "ast_hash": "eedb661ea0d7138f09bc052994f72dfb",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\header.tsx": {
@@ -55,8 +55,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\network-graph.tsx": {
-    "mtime": 1779790787.723888,
-    "ast_hash": "a585c1a83d27dc4158247fe42728100e",
+    "mtime": 1779794762.2251632,
+    "ast_hash": "1a83eed712e5a25545632dd419f53a99",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\node-detail-panel.tsx": {
@@ -79,44 +79,29 @@
     "ast_hash": "14d10c7a17782fd47cb1057bc3d9baa5",
     "semantic_hash": ""
   },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\ai-analysis-section.tsx": {
-    "mtime": 1779135812.0,
-    "ast_hash": "86ef4f9e2b224ec2f3fa1a1e9126ac7a",
-    "semantic_hash": ""
-  },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\animated-graph-background.tsx": {
     "mtime": 1779135812.0,
     "ast_hash": "c7e9219862d68bf038068c6331e395d2",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\cta-section.tsx": {
-    "mtime": 1779135812.0,
-    "ast_hash": "29daef43264ecada3a158d4ee04ce044",
+    "mtime": 1781497672.8323169,
+    "ast_hash": "96783eeb44854df13f92f91951cf2f1e",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\footer.tsx": {
-    "mtime": 1779186990.0611482,
-    "ast_hash": "5bee259014466efce5485583c41906fc",
+    "mtime": 1781504231.0224526,
+    "ast_hash": "64b96cea5d1722dd1466bf29d4738e6f",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\hero-section.tsx": {
-    "mtime": 1779135812.0,
-    "ast_hash": "3525d8be6042d84146a8a76f3239d3d5",
+    "mtime": 1781504136.590762,
+    "ast_hash": "fdb363de62b5a965212ea120760882b3",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\landing-header.tsx": {
-    "mtime": 1779186983.2702918,
-    "ast_hash": "3826ed50bbeec07864fad63d2c70843f",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\problem-section.tsx": {
-    "mtime": 1779135812.0,
-    "ast_hash": "b6f48508eb72e860646b3e08f0d24a49",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\simulation-preview.tsx": {
-    "mtime": 1779135812.0,
-    "ast_hash": "57d2184b109ebde43803fea2958732a3",
+    "mtime": 1781509395.7616358,
+    "ast_hash": "43febde38a907ca2a8bf0af753af5883",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\ui\\accordion.tsx": {
@@ -405,18 +390,18 @@
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\workspace\\left-sidebar.tsx": {
-    "mtime": 1779794174.7240803,
-    "ast_hash": "5d1f9d88b7efc47bbd8060ed0e436596",
+    "mtime": 1781508459.7478542,
+    "ast_hash": "d313dd4c1790e6d4be5306567480420c",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\workspace\\playback-timeline.tsx": {
-    "mtime": 1779180050.0,
-    "ast_hash": "5a95122c8777fa09f63613479c5af9ef",
+    "mtime": 1781510038.2304566,
+    "ast_hash": "f82d83a274c904d9a192da530eecc71a",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\workspace\\workspace-header.tsx": {
-    "mtime": 1779204540.763484,
-    "ast_hash": "cc7596e0f1f85852b4cb0c37955983c8",
+    "mtime": 1781509941.8845222,
+    "ast_hash": "578dafce6d9001e15576c6bb40cd3ee7",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\hooks\\use-mobile.ts": {
@@ -425,8 +410,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\hooks\\use-simulation.ts": {
-    "mtime": 1779790762.0078545,
-    "ast_hash": "e2b5cc304cbc565b1b22266f8c45e2f0",
+    "mtime": 1781517313.4780636,
+    "ast_hash": "a757095f0e900fc6a0867083733eff4f",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\hooks\\use-toast.ts": {
@@ -440,8 +425,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\README.md": {
-    "mtime": 1779201203.39027,
-    "ast_hash": "09683e3865b8c9dfa63131346ba49789",
+    "mtime": 1781518600.9693563,
+    "ast_hash": "ad3182f7569e73b934a0039e08a2c368",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\.agents\\rules\\graphify.md": {
@@ -499,19 +484,9 @@
     "ast_hash": "35707bd9960ba5281c72af927b79291f",
     "semantic_hash": ""
   },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\api\\analyze\\route.ts": {
-    "mtime": 1779203377.562989,
-    "ast_hash": "8d9e468c88530b45b3574e1c009e6281",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\api\\commentary\\route.ts": {
-    "mtime": 1779192485.5518615,
-    "ast_hash": "b3398576bf8e8754d95b74ab99ecfcfa",
-    "semantic_hash": ""
-  },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\workspace\\post-mortem-modal.tsx": {
-    "mtime": 1779190500.9807882,
-    "ast_hash": "3989411024723fcf8bae477d8cd1f3d8",
+    "mtime": 1781502794.996436,
+    "ast_hash": "f7f1d618045faefa6540d9a6dbc5562e",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\lib\\graph-definition.ts": {
@@ -525,48 +500,43 @@
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\api\\parse-architecture\\route.ts": {
-    "mtime": 1779203005.1077285,
-    "ast_hash": "69bafe639eba795068dbeea5ef1108f7",
+    "mtime": 1781515928.4438126,
+    "ast_hash": "98383cc42c6cf3b8bebfecd7d10281af",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\workspace\\import-architecture-modal.tsx": {
-    "mtime": 1779203069.1741965,
-    "ast_hash": "25e1504e03ce69c2590a93872c5bc69c",
+    "mtime": 1781516330.2659557,
+    "ast_hash": "edb5226076b52dca39d139118e079e61",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\dependencies.py": {
-    "mtime": 1779205326.2628117,
-    "ast_hash": "3c06ca0d996a3d1b945498a0c5c05f7a",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\graph_service.py": {
-    "mtime": 1779205354.8487728,
-    "ast_hash": "ccf5a53078a10e8dd800bc85db267772",
+    "mtime": 1781514051.1849008,
+    "ast_hash": "a86f68d2da8637e26cd3f80a113f2318",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\main.py": {
-    "mtime": 1779205360.4793832,
-    "ast_hash": "c1106c761ea95c8b3437fbedf0ae980f",
+    "mtime": 1781516497.6782987,
+    "ast_hash": "0d9bac4d015cc5f3b3d61093fa09e0eb",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\db\\neo4j.py": {
-    "mtime": 1779205300.6123588,
-    "ast_hash": "d318e84f6d69e3d625580f93c99fafd0",
+    "mtime": 1781502550.391212,
+    "ast_hash": "4fc2c710de80d6bc7f3932848996e692",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\db\\queries.py": {
-    "mtime": 1779205337.9443188,
-    "ast_hash": "9078d673d9b2e9cc5dde284a4fd97b3a",
+    "mtime": 1781509868.0054946,
+    "ast_hash": "12a9ecd920997a11c3d7707c3478cd39",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\db\\utils.py": {
-    "mtime": 1779205348.7236938,
-    "ast_hash": "06a474b6cb5375b0b704ed7a5d0e5893",
+    "mtime": 1781509220.4376328,
+    "ast_hash": "4d5964be438ad4881774073742031726",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\models\\graph.py": {
-    "mtime": 1779205343.199493,
-    "ast_hash": "13d1504bd1910dcc11ab6184c50ed4ae",
+    "mtime": 1781509804.010351,
+    "ast_hash": "155d45e77d9623670c8f3b9b46ff1dbd",
     "semantic_hash": ""
   },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\for_creator_update.md": {
@@ -574,44 +544,259 @@
     "ast_hash": "271945552d51819b6879c589fcae621c",
     "semantic_hash": ""
   },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\Docs\\Appflow.md": {
-    "mtime": 1779116670.1910055,
-    "ast_hash": "9f174055a423b9e98bae42decc2c845d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\Docs\\Backend Schema.md": {
-    "mtime": 1779115927.227165,
-    "ast_hash": "694462daee9d41c32a65b7499a63ce11",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\Docs\\Implementation plan.md": {
-    "mtime": 1779117671.6503806,
-    "ast_hash": "04899d155f89d513bee9f9422682c54b",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\Docs\\PRD.md": {
-    "mtime": 1779115532.8262048,
-    "ast_hash": "342b6684bba90d5754560f43f2623b6c",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\Docs\\Technical Requirements Document (TRD).md": {
-    "mtime": 1779115801.0137424,
-    "ast_hash": "d1edb685f3de5d53fcf2dc37820dbba6",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\Docs\\UI UX Design.md": {
-    "mtime": 1779113483.28185,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\api\\blast-radius\\route.ts": {
-    "mtime": 1779790748.8724823,
-    "ast_hash": "017100965e17a20d5b90d9c80a1a836c",
-    "semantic_hash": ""
-  },
   "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\docker-compose.yml": {
     "mtime": 1779793552.7467697,
     "ast_hash": "7883aa97bcbae1ac181042b1e49489c5",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\proxy.ts": {
+    "mtime": 1781504944.7247047,
+    "ast_hash": "fa0915a13d44a75d148ca13fc384ab88",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\about\\page.tsx": {
+    "mtime": 1781499916.3995233,
+    "ast_hash": "fe71274ca26a02314ba7c9f04dd6a0f3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\changelog\\page.tsx": {
+    "mtime": 1781505554.1095817,
+    "ast_hash": "205deb6a905bb06ce1f923e90bf5aaa6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\contact\\page.tsx": {
+    "mtime": 1781504246.8882868,
+    "ast_hash": "b9786f570c44b95b212cc98a26d7c445",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\dashboard\\page.tsx": {
+    "mtime": 1781505039.7335107,
+    "ast_hash": "81c3fda087130b57dbc9390c68a14a92",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\docs\\[[...slug]]\\page.tsx": {
+    "mtime": 1781503844.6667008,
+    "ast_hash": "5aafc1c88af5eb8113cfcd3c969428eb",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\features\\page.tsx": {
+    "mtime": 1781498871.3628862,
+    "ast_hash": "6bdf7707ed34a1b2beba5589195bd53d",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\pricing\\page.tsx": {
+    "mtime": 1781498995.603817,
+    "ast_hash": "0a8b255e18a5fa6d3211e61fd1d4dd0a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\privacy\\page.tsx": {
+    "mtime": 1781503099.4845908,
+    "ast_hash": "81e6b3375f5df2cb83ba9f42b217cef7",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\sign-in\\[[...sign-in]]\\page.tsx": {
+    "mtime": 1781510148.6265345,
+    "ast_hash": "884014a6c7ce730bfcae5629fbd6dd03",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\sign-up\\[[...sign-up]]\\page.tsx": {
+    "mtime": 1781510150.0081778,
+    "ast_hash": "ec00c7e31bdaec05715c2e819180244f",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\app\\terms\\page.tsx": {
+    "mtime": 1781503101.4980328,
+    "ast_hash": "a937b2f0ece2e50383496cac3ab46adc",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\models\\architecture.py": {
+    "mtime": 1781504988.242152,
+    "ast_hash": "265a182b9c3034e6d24ed4b96e5b8f71",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\services\\analysis_service.py": {
+    "mtime": 1781502704.429778,
+    "ast_hash": "27262524c79e475ff33f3eea5ab2ee96",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\services\\graph_service.py": {
+    "mtime": 1781509240.7271676,
+    "ast_hash": "d9f1588e9726d076c5d1430436ae5324",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\services\\intelligence_service.py": {
+    "mtime": 1781509870.0222466,
+    "ast_hash": "39de5f42a9c4d98c29dd3b6816ec93aa",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\services\\reliability_service.py": {
+    "mtime": 1781502690.175177,
+    "ast_hash": "e78048f60dd0cf6e24054bc0e08cb003",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\services\\scenario_service.py": {
+    "mtime": 1781502657.3621001,
+    "ast_hash": "32ce9809204b5647daf5206bde41cd86",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\services\\simulation_engine.py": {
+    "mtime": 1781510660.146258,
+    "ast_hash": "669770c573bca8ac63bbc55f439f7ad2",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\services\\validation_service.py": {
+    "mtime": 1781511749.1148949,
+    "ast_hash": "0be2d81ae6f71b3c0803ba308a0425c4",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\tests\\test_engine.py": {
+    "mtime": 1781502827.9657948,
+    "ast_hash": "67deb126251020d1c46ee247f1d7bf60",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\docs\\docs-content.tsx": {
+    "mtime": 1781508781.7819183,
+    "ast_hash": "0bf3d257a8e39131262f8deb4926866a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\docs\\docs-header.tsx": {
+    "mtime": 1781504233.0425997,
+    "ast_hash": "d7c61cc586361577418904031fcd49c6",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\docs\\docs-sidebar.tsx": {
+    "mtime": 1781503171.6966558,
+    "ast_hash": "d8c9ef809405bd99cf95ffbdde60ba0c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\docs\\docs-toc.tsx": {
+    "mtime": 1781503208.774511,
+    "ast_hash": "f379cf89278d2dd80f76c7c4a64c582a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\cookie-consent.tsx": {
+    "mtime": 1781500277.2726862,
+    "ast_hash": "17d2330518396e399642746b5c836c89",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\landing\\feature-showcase.tsx": {
+    "mtime": 1781498323.7748482,
+    "ast_hash": "c03509bcb49a3dd538dd70ac77579479",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\legal\\legal-layout.tsx": {
+    "mtime": 1781503937.1790447,
+    "ast_hash": "4c93817e8f8d97c7ffeae0d78f161d77",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\legal\\section-header.tsx": {
+    "mtime": 1781503097.4716477,
+    "ast_hash": "4710df9b0594f2b6b688d6d02ada695b",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\workspace\\inject-fault-modal.tsx": {
+    "mtime": 1781508065.6068685,
+    "ast_hash": "b97ff760a1118fdb95262720dbd92809",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\components\\workspace\\intelligence-modal.tsx": {
+    "mtime": 1781509910.3699787,
+    "ast_hash": "503f148df2d613c29eaa91890e5c9415",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\lib\\docs.ts": {
+    "mtime": 1781501209.9404879,
+    "ast_hash": "b49547c0cbb461fe8c248c7649353013",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\requirements.txt": {
+    "mtime": 1781518195.1466274,
+    "ast_hash": "0c872127a60993d8be27b50934300523",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\backend\\requirements.txt": {
+    "mtime": 1781502813.9539218,
+    "ast_hash": "d3ebf1c3473098957eacf6a811247f06",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\ai-analysis\\bottleneck-detection.md": {
+    "mtime": 1781501405.8118434,
+    "ast_hash": "c9811339e2d51ad459a3c44e2a2136e3",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\ai-analysis\\resilience-insights.md": {
+    "mtime": 1781501411.7796206,
+    "ast_hash": "d8343ae409c355c7c2fd8d2fad2d13b5",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\ai-analysis\\root-cause-analysis.md": {
+    "mtime": 1781501399.3930345,
+    "ast_hash": "e9fb1cdc0202be359a528369bb9df036",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\api\\analysis.md": {
+    "mtime": 1781501422.9716058,
+    "ast_hash": "f5b76a225230e1a9d0e4b12693cb741c",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\api\\architectures.md": {
+    "mtime": 1781501418.938021,
+    "ast_hash": "20c21e06ae24927c4d8c44aec3c5e058",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\api\\index.md": {
+    "mtime": 1781505457.458594,
+    "ast_hash": "27506cfd7336a041fbe0e12fb213585e",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\api\\simulations.md": {
+    "mtime": 1781501420.9593859,
+    "ast_hash": "5dbf13c448bd2983d35eac92f58145d9",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\core-concepts\\dependencies.md": {
+    "mtime": 1781501350.9773748,
+    "ast_hash": "993426186ecece668e9975932c648e6a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\core-concepts\\infrastructure-graphs.md": {
+    "mtime": 1781501323.565442,
+    "ast_hash": "a26c8b9cef42ae37be8555f0f39b8140",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\core-concepts\\simulation-states.md": {
+    "mtime": 1781501361.9081376,
+    "ast_hash": "f1d0373509340b30341d645f55f42aed",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\getting-started\\architecture-upload.md": {
+    "mtime": 1781501321.5383928,
+    "ast_hash": "f7177936530d5166380e1d72209e4c34",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\getting-started\\introduction.md": {
+    "mtime": 1781501289.9232128,
+    "ast_hash": "5de75e43b7dfa671f0cf13a0cd9b00ed",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\getting-started\\quick-start.md": {
+    "mtime": 1781501291.9469252,
+    "ast_hash": "3a709c3ab7bdef46a18de924e5fe4c8a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\simulation-engine\\failure-propagation.md": {
+    "mtime": 1781501370.4728186,
+    "ast_hash": "3df28e031cce1cb4d6dcb5aaf54d922a",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\simulation-engine\\reliability-scoring.md": {
+    "mtime": 1781501372.4925618,
+    "ast_hash": "0fd197d3bd256cd1492de85b651cb028",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\Aditya Rane\\Downloads\\Coding Projects\\BLACKOUT\\content\\docs\\simulation-engine\\scenario-generation.md": {
+    "mtime": 1781501368.4498026,
+    "ast_hash": "cd2035fc495ae34bc331c08717db13b6",
     "semantic_hash": ""
   }
 }
