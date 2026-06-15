@@ -80,7 +80,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()} BLACKOUT. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Privacy
             </Link>
             <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
