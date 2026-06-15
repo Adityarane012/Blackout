@@ -41,9 +41,38 @@ class SimulationEngine:
                 if n.get("type", "").lower() in ["frontend", "cdn"]:
                     queue.append((nid, 0, "STRESSED"))
                     visited.add(nid)
+        elif scenario == "retry_storm":
+            for nid, n in self.nodes.items():
+                if n.get("type", "").lower() == "api":
+                    queue.append((nid, 0, "STRESSED"))
+                    visited.add(nid)
+        elif scenario == "database_saturation":
+            for nid, n in self.nodes.items():
+                if n.get("type", "").lower() == "database":
+                    queue.append((nid, 0, "DEGRADED"))
+                    visited.add(nid)
+        elif scenario == "queue_congestion":
+            for nid, n in self.nodes.items():
+                if n.get("type", "").lower() == "queue":
+                    queue.append((nid, 0, "STRESSED"))
+                    visited.add(nid)
+        elif scenario == "api_failure":
+            api_nodes = [nid for nid, n in self.nodes.items() if n.get("type", "").lower() == "api"]
+            if api_nodes:
+                queue.append((api_nodes[0], 0, "FAILED"))
+                visited.add(api_nodes[0])
         else:
             if target_id and target_id in self.nodes:
-                initial_state = trigger.get("initial_state", "FAILED")
+                fault_type = trigger.get("fault_type", "Failure")
+                severity = trigger.get("severity", "Critical")
+                
+                if severity.upper() == "CRITICAL":
+                    initial_state = "FAILED"
+                elif severity.upper() == "HIGH":
+                    initial_state = "DEGRADED"
+                else:
+                    initial_state = "STRESSED"
+                    
                 queue.append((target_id, 0, initial_state))
                 visited.add(target_id)
         

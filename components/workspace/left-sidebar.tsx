@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import type { InfraNode } from "../network-graph"
 
 interface LeftSidebarProps {
@@ -8,8 +9,9 @@ interface LeftSidebarProps {
   selectedNode: InfraNode | null
   onNodeSelect: (node: InfraNode | null) => void
   onTriggerFailure: (nodeId: string) => void
-  onInjectFault: () => void
+  onOpenCustomFault: () => void
   onCascadeMode: () => void
+  liveAnalysis: { rootCause?: string, primaryImpact?: string, secondaryImpact?: string, recommendation?: string } | null
 }
 
 export function LeftSidebar({
@@ -17,39 +19,18 @@ export function LeftSidebar({
   selectedNode,
   onNodeSelect,
   onTriggerFailure,
-  onInjectFault,
+  onOpenCustomFault,
   onCascadeMode,
+  liveAnalysis,
 }: LeftSidebarProps) {
-  const [aiInsight, setAiInsight] = useState<string>("")
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-
   const healthyCount = nodes.filter((n) => n.status === "healthy").length
   const stressCount = nodes.filter((n) => n.status === "stress").length
   const failureCount = nodes.filter((n) => n.status === "failure").length
   const totalNodes = nodes.length
   const healthPercentage = totalNodes > 0 ? Math.round((healthyCount / totalNodes) * 100) : 0
 
-  // Calculate risk score
   const riskScore = Math.min(100, failureCount * 25 + stressCount * 10)
-  const avgLoad = nodes.reduce((sum, n) => sum + n.load, 0) / totalNodes
-
-  // Regenerate AI insight only when health counts change (not every load tick)
-  useEffect(() => {
-    setIsAnalyzing(true)
-    const timer = setTimeout(() => {
-      setIsAnalyzing(false)
-      if (failureCount > 0) {
-        setAiInsight(`Critical alert: ${failureCount} node(s) offline. Cascade probability: ${Math.min(95, 40 + failureCount * 20)}%. Recommend immediate failover activation.`)
-      } else if (stressCount > 2) {
-        setAiInsight(`Warning: ${stressCount} nodes under stress. Network approaching capacity threshold. Load redistribution recommended.`)
-      } else if (avgLoad > 60) {
-        setAiInsight(`Elevated system load detected (avg ${Math.round(avgLoad)}%). Monitor for potential bottlenecks in high-traffic paths.`)
-      } else {
-        setAiInsight("System operating within normal parameters. All redundancy paths active. No cascade risks detected.")
-      }
-    }, 800)
-    return () => clearTimeout(timer)
-  }, [failureCount, stressCount])
+  const avgLoad = totalNodes > 0 ? nodes.reduce((sum, n) => sum + n.load, 0) / totalNodes : 0
 
   return (
     <aside className="w-80 bg-card/90 border-r border-border/50 flex flex-col overflow-hidden">
@@ -61,13 +42,31 @@ export function LeftSidebar({
         </div>
         
         <div className="bg-purple-500/5 border border-purple-500/20 rounded-lg p-3 min-h-[80px]">
-          {isAnalyzing ? (
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-              <span className="text-xs font-mono text-purple-400">Processing neural network...</span>
+          {liveAnalysis ? (
+            <div className="space-y-2">
+              <div className="text-xs font-mono">
+                <span className="text-purple-400 uppercase tracking-wider text-[10px] block mb-0.5">Root Cause</span>
+                <span className="text-foreground/90">{liveAnalysis.rootCause || "Analyzing..."}</span>
+              </div>
+              {liveAnalysis.primaryImpact && (
+                <div className="text-xs font-mono">
+                  <span className="text-orange-400 uppercase tracking-wider text-[10px] block mb-0.5">Primary Impact</span>
+                  <span className="text-foreground/90">{liveAnalysis.primaryImpact}</span>
+                </div>
+              )}
+              {liveAnalysis.secondaryImpact && (
+                <div className="text-xs font-mono">
+                  <span className="text-orange-400/80 uppercase tracking-wider text-[10px] block mb-0.5">Secondary Impact</span>
+                  <span className="text-foreground/90">{liveAnalysis.secondaryImpact}</span>
+                </div>
+              )}
+              <div className="text-xs font-mono pt-2 mt-2 border-t border-purple-500/20">
+                <span className="text-cyan-400 uppercase tracking-wider text-[10px] block mb-0.5">Recommendation</span>
+                <span className="text-foreground/90">{liveAnalysis.recommendation}</span>
+              </div>
             </div>
           ) : (
-            <p className="text-xs font-mono text-purple-300/90 leading-relaxed">{aiInsight}</p>
+            <p className="text-xs font-mono text-purple-300/60 leading-relaxed">System operating within normal parameters. Awaiting telemetry anomalies.</p>
           )}
         </div>
 
@@ -100,7 +99,7 @@ export function LeftSidebar({
         <div className="space-y-2">
           {/* Fault Injection */}
           <button
-            onClick={onInjectFault}
+            onClick={onOpenCustomFault}
             className="w-full flex items-center justify-between px-3 py-2.5 bg-orange-500/10 hover:bg-orange-500/15 border border-orange-500/30 hover:border-orange-500/50 rounded-lg transition-all duration-200 group"
           >
             <div className="flex items-center gap-2">
@@ -162,9 +161,14 @@ export function LeftSidebar({
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-mono text-foreground">Network Health</span>
-            <span className={`text-lg font-mono font-bold ${healthPercentage > 80 ? "text-cyan-400" : healthPercentage > 50 ? "text-orange-400" : "text-red-400"}`}>
+            <motion.span 
+              key={healthPercentage}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className={`text-lg font-mono font-bold ${healthPercentage > 80 ? "text-cyan-400" : healthPercentage > 50 ? "text-orange-400" : "text-red-400"}`}
+            >
               {healthPercentage}%
-            </span>
+            </motion.span>
           </div>
           <div className="h-3 bg-secondary rounded-full overflow-hidden flex">
             <div className="h-full bg-cyan-500 transition-all duration-500" style={{ width: `${(healthyCount / totalNodes) * 100}%` }} />
@@ -176,15 +180,15 @@ export function LeftSidebar({
         {/* Node Status Grid */}
         <div className="grid grid-cols-3 gap-2 mb-4">
           <div className="text-center p-3 rounded-lg bg-cyan-500/5 border border-cyan-500/20">
-            <div className="text-2xl font-mono font-bold text-cyan-400">{healthyCount}</div>
+            <motion.div key={healthyCount} initial={{ scale: 1.5 }} animate={{ scale: 1 }} className="text-2xl font-mono font-bold text-cyan-400">{healthyCount}</motion.div>
             <div className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground">Healthy</div>
           </div>
           <div className="text-center p-3 rounded-lg bg-orange-500/5 border border-orange-500/20">
-            <div className="text-2xl font-mono font-bold text-orange-400">{stressCount}</div>
+            <motion.div key={stressCount} initial={{ scale: 1.5 }} animate={{ scale: 1 }} className="text-2xl font-mono font-bold text-orange-400">{stressCount}</motion.div>
             <div className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground">Stress</div>
           </div>
           <div className="text-center p-3 rounded-lg bg-red-500/5 border border-red-500/20">
-            <div className="text-2xl font-mono font-bold text-red-400">{failureCount}</div>
+            <motion.div key={failureCount} initial={{ scale: 1.5 }} animate={{ scale: 1 }} className="text-2xl font-mono font-bold text-red-400">{failureCount}</motion.div>
             <div className="text-[9px] font-mono uppercase tracking-wider text-muted-foreground">Failed</div>
           </div>
         </div>

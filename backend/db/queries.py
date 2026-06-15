@@ -4,7 +4,7 @@
 # 1. Dynamic Node Creation & Merging using Type Labels
 # This uses APOC or dynamic node labels to add specific SRE classifications (e.g. :Database, :Service) alongside a generic :InfraNode base.
 CREATE_INFRA_NODE_CYPHER = """
-MERGE (n:InfraNode {id: $id})
+MERGE (n:InfraNode {id: $id, arch_id: $arch_id})
 SET n.label = $label,
     n.type = $type,
     n.status = $status,
@@ -20,7 +20,7 @@ RETURN node
 
 # Production-safe fallback node merging query (when APOC is not loaded in local Neo4j plugins)
 UPSERT_NODE_CYPHER = """
-MERGE (n:InfraNode {id: $id})
+MERGE (n:InfraNode {id: $id, arch_id: $arch_id})
 SET n.label = $label,
     n.type = $type,
     n.status = $status,
@@ -34,8 +34,8 @@ RETURN n
 
 # 2. Directed Dependency Connection Merging
 CREATE_DEPENDENCY_CYPHER = """
-MATCH (from:InfraNode {id: $from_id})
-MATCH (to:InfraNode {id: $to_id})
+MATCH (from:InfraNode {id: $from_id, arch_id: $arch_id})
+MATCH (to:InfraNode {id: $to_id, arch_id: $arch_id})
 MERGE (from)-[r:DEPENDS_ON]->(to)
 SET r.status = $status,
     r.traffic = toFloat($traffic),
@@ -46,7 +46,7 @@ RETURN from.id AS from_id, to.id AS to_id, type(r) AS rel_type, r.status AS stat
 
 # 3. Targeted Node Telemetry Update Mutation
 UPDATE_NODE_TELEMETRY_CYPHER = """
-MATCH (n:InfraNode {id: $id})
+MATCH (n:InfraNode {id: $id, arch_id: $arch_id})
 SET n.status = $status,
     n.load = toFloat($load),
     n.latency = toFloat($latency),
@@ -57,12 +57,12 @@ RETURN n { .id, .label, .type, .status, .load, .capacity, .latency, .error_rate 
 
 # 4. Read Operations
 GET_ALL_NODES_CYPHER = """
-MATCH (n:InfraNode)
+MATCH (n:InfraNode {arch_id: $arch_id})
 RETURN n { .id, .label, .type, .status, .load, .capacity, .latency, .error_rate } AS node
 """
 
 GET_ALL_DEPENDENCIES_CYPHER = """
-MATCH (from:InfraNode)-[r:DEPENDS_ON]->(to:InfraNode)
+MATCH (from:InfraNode {arch_id: $arch_id})-[r:DEPENDS_ON]->(to:InfraNode {arch_id: $arch_id})
 RETURN { 
     from: from.id, 
     to: to.id, 
@@ -75,7 +75,7 @@ RETURN {
 # 5. Advanced Recursive Cascade Paths
 # Traces all upstream nodes that recursively rely on the target crashed node.
 TRACE_CASCADE_BLAST_RADIUS_CYPHER = """
-MATCH path = (dependent:InfraNode)-[:DEPENDS_ON*]->(root:InfraNode {id: $root_id})
+MATCH path = (dependent:InfraNode {arch_id: $arch_id})-[:DEPENDS_ON*]->(root:InfraNode {id: $root_id, arch_id: $arch_id})
 UNWIND nodes(path) as n
 WITH DISTINCT n
 WHERE n.id <> $root_id
@@ -85,7 +85,7 @@ RETURN n { .id, .label, .type, .status, .load, .capacity, .latency, .error_rate 
 # 6. Bottleneck Analysis
 # Identifies nodes with high in-degree dependencies (Critical dependency hubs)
 GET_BOTTLENECK_ANALYSIS_CYPHER = """
-MATCH (n:InfraNode)<-[r:DEPENDS_ON]-(dependent:InfraNode)
+MATCH (n:InfraNode {arch_id: $arch_id})<-[r:DEPENDS_ON]-(dependent:InfraNode {arch_id: $arch_id})
 WITH n, count(r) AS in_degree, collect(dependent.id) as dependent_ids
 WHERE in_degree > 0
 RETURN n { .id, .label, .type } AS node, in_degree, dependent_ids

@@ -68,3 +68,12 @@ __v0_jsx-dev-runtime.ts
 
 # Project Status Update
 /for_creator_update.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/

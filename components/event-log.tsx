@@ -16,13 +16,14 @@ interface EventLogProps {
 
 export function EventLog({ events }: EventLogProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
   const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" })
     }
-  }, [events])
+  }, [events, isExpanded])
 
   const displayEvents = isExpanded ? events.slice(-20) : events.slice(-5)
 
@@ -58,6 +59,7 @@ export function EventLog({ events }: EventLogProps) {
             {displayEvents.map((event) => (
               <EventItem key={event.id} event={event} />
             ))}
+            <div ref={bottomRef} />
           </div>
         </div>
       </div>

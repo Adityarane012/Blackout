@@ -12,10 +12,12 @@ interface Scenario {
 
 const SCENARIOS: Scenario[] = [
   { id: "normal", name: "Normal Operations", description: "Standard traffic patterns", severity: "low" },
-  { id: "traffic-spike", name: "Traffic Surge", description: "10x traffic increase", severity: "medium" },
-  { id: "db-failure", name: "Database Failure", description: "Primary DB goes offline", severity: "high" },
-  { id: "cascade", name: "Cascade Event", description: "Multi-system failure chain", severity: "critical" },
-  { id: "region-outage", name: "Region Outage", description: "US-EAST zone failure", severity: "critical" },
+  { id: "black_friday_traffic", name: "Black Friday Traffic", description: "10x traffic surge across all frontends", severity: "medium" },
+  { id: "retry_storm", name: "Retry Storm", description: "Cascading retries overloading APIs", severity: "high" },
+  { id: "database_saturation", name: "Database Saturation", description: "Primary DB connection pool exhausted", severity: "high" },
+  { id: "queue_congestion", name: "Queue Congestion", description: "Message broker backlog buildup", severity: "medium" },
+  { id: "api_failure", name: "API Failure", description: "Critical API gateway outage", severity: "critical" },
+  { id: "custom_fault", name: "Custom Fault", description: "Configure a specific targeted failure", severity: "critical" },
 ]
 
 interface WorkspaceHeaderProps {
@@ -28,6 +30,7 @@ interface WorkspaceHeaderProps {
   currentScenario: string
   onOpenImport: () => void
   onAbort: () => void
+  onOpenCustomFault: () => void
   onSaveArchitecture?: () => void
 }
 
@@ -41,6 +44,7 @@ export function WorkspaceHeader({
   currentScenario,
   onOpenImport,
   onAbort,
+  onOpenCustomFault,
   onSaveArchitecture,
 }: WorkspaceHeaderProps) {
   const { userId } = useAuth()
@@ -128,7 +132,11 @@ export function WorkspaceHeader({
                 <button
                   key={scenario.id}
                   onClick={() => {
-                    onScenarioChange(scenario)
+                    if (scenario.id === "custom_fault") {
+                      onOpenCustomFault()
+                    } else {
+                      onScenarioChange(scenario)
+                    }
                     setIsScenarioOpen(false)
                   }}
                   className={`w-full flex items-center justify-between px-4 py-3 hover:bg-secondary/50 transition-colors ${
@@ -246,7 +254,7 @@ export function WorkspaceHeader({
           <div className="text-[10px] font-mono text-muted-foreground">Session</div>
           <div className="text-xs font-mono text-foreground mr-2">{sessionId ? `SIM-${sessionId}` : "SIM-······"}</div>
         </div>
-        {userId && <UserButton afterSignOutUrl="/" />}
+        {userId && <UserButton />}
       </div>
     </header>
   )

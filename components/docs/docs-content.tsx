@@ -85,7 +85,7 @@ export function DocsContent({ doc }: { doc?: DocContent }) {
             blockquote: ({node, ...props}) => (
               <div className="my-8 p-4 rounded-xl border border-cyan-500/20 bg-cyan-500/5 flex gap-4">
                 <Info className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                <div className="text-sm text-foreground/80 [&>p]:m-0" {...props} />
+                <blockquote className="text-sm text-foreground/80 [&>p]:m-0 border-0 p-0 m-0" {...props} />
               </div>
             )
           }}

@@ -96,7 +96,7 @@ export function LandingHeader() {
                   Simulator
                 </Button>
               </Link>
-              <UserButton afterSignOutUrl="/" />
+              <UserButton />
             </>
           )}
         </div>

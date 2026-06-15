@@ -7,21 +7,20 @@
 **BLACKOUT** is an immersive, high-tension Site Reliability Engineering (SRE) playground and interactive microservice outage simulator. Built with a premium, CRT-scanline cyberpunk aesthetic, it allows developers to model, visualize, and inject chaos into a regional system-dependency map in real time. 
 
 > [!NOTE]
-> This is a **pure frontend sandbox simulation**. It runs entirely client-side inside the browser. It executes **no** destructive terminal commands or system-level scripts that could impact your physical computer or hardware.
-
+> BLACKOUT V1 is a **full-stack application**. It features a **Next.js** interactive frontend, a **FastAPI** simulation engine, a **Neo4j** graph database for storing architectures, and **Clerk** for user authentication and multi-tenant architecture scoping.
 ---
 
 ## ⚡ Key Features
 
-* **Visual Infrastructure Map**: A 15-node regional system grid spanning `GLOBAL`, `US-EAST`, `US-WEST`, and `EU-WEST` regions, mapping edges, load balancers, api-gateways, compute servers, cache servers, Kafka queues, and databases.
+* **Visual Infrastructure Map**: A 15-node regional system grid spanning `GLOBAL`, `US-EAST`, `US-WEST`, and `EU-WEST` regions. Create and save your own custom architectures!
 * **Deterministic State-Machine**: Systems organically shift state based on live queue load:
   $$\text{Healthy} \xrightarrow{\text{Load } \ge 75\%} \text{Stress} \xrightarrow{\text{Load } \ge 92\%} \text{Degraded} \xrightarrow{\text{Compounding Chance}} \text{Failure}$$
-* **Stress Propagation Engine**: Simulates realistic upstream database outage pressure on servers, cache-miss storms, and automatic load redistribution/failover across active redundant compute clusters.
-* **AI Telemetry & operator logs (ORION-9)**: Live telemetry commentary `/api/commentary` and full post-mortem generator `/api/analyze` leveraging **Ollama (local Gemma2/Phi4)**, **Google Gemini**, or **OpenAI** API endpoints with a robust, offline procedural fallback script.
+* **Neo4j Graph Backend**: Architectures and simulation topologies are stored, traced, and analyzed using Neo4j Cypher queries for explosive blast-radius calculation.
+* **Multi-Tenant Dashboard**: Sign in with Clerk to save architectures, view simulation history, and track system resilience.
 * **Chaos Scenario Injection**: Trigger system events from the operator terminal:
   * *Traffic Surge*: Satures CDN edges and routing pipelines.
   * *Database Failure*: Catastrophically drops core replicas, starting cascade chains.
-  * *Domino Outage*: Initiates continuous, compounding outages across randomly connected adjacent dependencies.
+  * *Targeted Faults*: Inject latency spikes, packet loss, or DB saturation onto specific nodes.
 
 ---
 
@@ -87,26 +86,41 @@ graph TD
 
 ## 🚀 Quick Start
 
-### 1. Clone & Install Dependencies
-Ensure you have Node.js (version 18+) installed:
-```bash
-npm install
-```
+### 1. Requirements
+Ensure you have the following installed:
+* Node.js (version 18+)
+* Python (version 3.10+)
+* Neo4j Database (Local or AuraDB)
 
-### 2. Configure Environment Keys (Optional)
-Create a `.env.local` file at the root of the project to enable advanced AI SRE operator intelligence:
+### 2. Configure Environment Keys
+Create a `.env.local` file at the root of the project to enable Clerk Auth and AI SRE operator intelligence:
 ```env
-# Cloud AI Credentials
-GEMINI_API_KEY=your_google_gemini_api_key_here
-OPENAI_API_KEY=your_openai_api_key_here
-```
-*(If no API keys are provided, the simulator seamlessly uses your local **Ollama** engine at `http://localhost:11434` or falls back to an atmospheric offline procedural generation script!)*
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
 
-### 3. Run Development Server
+# Neo4j Graph Database
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=password
+```
+
+### 3. Start Backend Services
 ```bash
+# In a new terminal, activate virtual environment and start FastAPI
+cd backend
+python -m venv venv
+source venv/bin/activate  # or `venv\Scripts\activate` on Windows
+pip install -r requirements.txt
+uvicorn backend.main:app --reload
+```
+
+### 4. Run Frontend Server
+```bash
+# In your main terminal
+npm install
 npm run dev
 ```
-Open **[http://localhost:3000](http://localhost:3000)** or **[http://localhost:3000/simulator](http://localhost:3000/simulator)** to operate the grid.
+Open **[http://localhost:3000](http://localhost:3000)** or **[http://localhost:3000/simulator](http://localhost:3000/simulator)** to sign in and operate the grid.
 
 ---
 

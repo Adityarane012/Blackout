@@ -1,6 +1,7 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { NetworkGraph } from "@/components/network-graph"
 import { WorkspaceHeader } from "@/components/workspace/workspace-header"
 import { LeftSidebar } from "@/components/workspace/left-sidebar"
@@ -8,10 +9,15 @@ import { PlaybackTimeline } from "@/components/workspace/playback-timeline"
 import { EventLog } from "@/components/event-log"
 import { PostMortemModal } from "@/components/workspace/post-mortem-modal"
 import { ImportArchitectureModal } from "@/components/workspace/import-architecture-modal"
+import { InjectFaultModal } from "@/components/workspace/inject-fault-modal"
 import { useSimulation } from "@/hooks/use-simulation"
 
-export default function SimulatorPage() {
+function SimulatorContent() {
+  const searchParams = useSearchParams()
+  const archId = searchParams.get("arch")
+
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+  const [isFaultModalOpen, setIsFaultModalOpen] = useState(false)
   const [isAborting, setIsAborting] = useState(false)
 
   const handleAbortSimulation = useCallback(() => {
@@ -39,6 +45,8 @@ export default function SimulatorPage() {
     resetSimulation,
     handleScenarioChange,
     loadCustomTopology,
+    triggerTargetedFault,
+    loadArchitectureFromBackend,
     
     // AI and post-mortem states
     isAnalyzingPostMortem,
@@ -48,7 +56,14 @@ export default function SimulatorPage() {
     setIsPostMortemOpen,
     blastRadiusNodeIds,
     saveCurrentArchitecture,
+    liveAnalysis,
   } = useSimulation()
+
+  useEffect(() => {
+    if (archId) {
+      loadArchitectureFromBackend(archId)
+    }
+  }, [archId, loadArchitectureFromBackend])
 
   const handleNodeClick = useCallback(
     (node: { id: string }) => setSelectedNodeId(node.id),
@@ -70,6 +85,7 @@ export default function SimulatorPage() {
         currentScenario={currentScenario}
         onOpenImport={() => setIsImportModalOpen(true)}
         onAbort={handleAbortSimulation}
+        onOpenCustomFault={() => setIsFaultModalOpen(true)}
         onSaveArchitecture={() => saveCurrentArchitecture("My Custom Architecture")}
       />
 
@@ -79,8 +95,9 @@ export default function SimulatorPage() {
           selectedNode={selectedNode}
           onNodeSelect={(node) => setSelectedNodeId(node?.id ?? null)}
           onTriggerFailure={triggerNodeFailure}
-          onInjectFault={injectRandomFailure}
+          onOpenCustomFault={() => setIsFaultModalOpen(true)}
           onCascadeMode={triggerCascadeMode}
+          liveAnalysis={liveAnalysis}
         />
 
         <main className="flex-1 relative overflow-hidden min-h-0">
@@ -136,6 +153,22 @@ export default function SimulatorPage() {
           loadCustomTopology(customNodes)
         }}
       />
+
+      {/* Inject Fault Modal */}
+      <InjectFaultModal
+        isOpen={isFaultModalOpen}
+        onClose={() => setIsFaultModalOpen(false)}
+        nodes={nodes}
+        onInject={triggerTargetedFault}
+      />
     </div>
+  )
+}
+
+export default function SimulatorPage() {
+  return (
+    <Suspense fallback={<div className="w-screen h-screen bg-background flex items-center justify-center text-cyan-400 font-mono">Initializing Simulator...</div>}>
+      <SimulatorContent />
+    </Suspense>
   )
 }

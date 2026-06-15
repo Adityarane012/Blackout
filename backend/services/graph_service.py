@@ -22,24 +22,25 @@ class GraphService:
     def __init__(self, session: Session):
         self.session = session
 
-    def create_infra_node(self, node: NodeModel) -> Dict[str, Any]:
+    def create_infra_node(self, node: NodeModel, arch_id: str) -> Dict[str, Any]:
         """
         Uses parameterized Cypher utilities to create or merge an active SRE Node Entity.
         """
-        return create_graph_node(self.session, node)
+        return create_graph_node(self.session, node, arch_id)
 
-    def create_dependency(self, dep: DependencyModel) -> Dict[str, Any]:
+    def create_dependency(self, dep: DependencyModel, arch_id: str) -> Dict[str, Any]:
         """
         Uses parameterized Cypher utilities to forge directed DEPENDS_ON relationship edges.
         """
-        return create_graph_relationship(self.session, dep)
+        return create_graph_relationship(self.session, dep, arch_id)
 
-    def update_node_status(self, node_id: str, status: str, load: float, latency: float = 0.0, error_rate: float = 0.0) -> Dict[str, Any]:
+    def update_node_status(self, node_id: str, arch_id: str, status: str, load: float, latency: float = 0.0, error_rate: float = 0.0) -> Dict[str, Any]:
         """
         Mutates current node telemetry parameters (load, latency, error_rate) within a transaction.
         """
         result = self.session.run(UPDATE_NODE_TELEMETRY_CYPHER, {
             "id": node_id,
+            "arch_id": arch_id,
             "status": status,
             "load": load,
             "latency": latency,
@@ -48,14 +49,14 @@ class GraphService:
         record = result.single()
         return record["node"] if record else {}
 
-    def get_topology(self) -> Dict[str, Any]:
+    def get_topology(self, arch_id: str) -> Dict[str, Any]:
         """
         Queries and matches all nodes and relationships to generate a clean topology map.
         """
-        nodes_result = self.session.run(GET_ALL_NODES_CYPHER)
+        nodes_result = self.session.run(GET_ALL_NODES_CYPHER, {"arch_id": arch_id})
         nodes = [rec["node"] for rec in nodes_result]
         
-        conn_result = self.session.run(GET_ALL_DEPENDENCIES_CYPHER)
+        conn_result = self.session.run(GET_ALL_DEPENDENCIES_CYPHER, {"arch_id": arch_id})
         connections = [rec["connection"] for rec in conn_result]
         
         return {
@@ -63,19 +64,19 @@ class GraphService:
             "connections": connections
         }
 
-    def trace_cascade_blast_radius(self, root_failure_id: str) -> List[Dict[str, Any]]:
+    def trace_cascade_blast_radius(self, root_failure_id: str, arch_id: str) -> List[Dict[str, Any]]:
         """
         Executes a recursive, deep-relationship search to determine all upstream
         elements in danger of cascading crashes if the root node fails.
         """
-        result = self.session.run(TRACE_CASCADE_BLAST_RADIUS_CYPHER, {"root_id": root_failure_id})
+        result = self.session.run(TRACE_CASCADE_BLAST_RADIUS_CYPHER, {"root_id": root_failure_id, "arch_id": arch_id})
         return [rec["affected_node"] for rec in result]
 
-    def bulk_import(self, nodes: List[NodeModel], dependencies: List[DependencyModel]) -> Dict[str, Any]:
+    def bulk_import(self, nodes: List[NodeModel], dependencies: List[DependencyModel], arch_id: str) -> Dict[str, Any]:
         """
         Transactionally batch-loads whole network grids in a single atomic pass.
         """
-        return bulk_import_topology(self.session, nodes, dependencies)
+        return bulk_import_topology(self.session, nodes, dependencies, arch_id)
 
     def reset_grid(self) -> bool:
         """
@@ -85,11 +86,10 @@ class GraphService:
         self.session.run(query)
         return True
 
-    def load_architecture(self, nodes: List[Dict[str, Any]], edges: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def load_architecture(self, nodes: List[Dict[str, Any]], edges: List[Dict[str, Any]], arch_id: str) -> Dict[str, Any]:
         """
-        Clears the grid and loads a completely new validated architecture.
+        Loads a completely new validated architecture, scoped to arch_id.
         """
-        self.reset_grid()
         node_models = [NodeModel(**n) for n in nodes]
         # Map source/target to from_id/to_id
         dep_models = []
@@ -101,14 +101,14 @@ class GraphService:
                 traffic=50.0,
                 latency=20.0
             ))
-        return self.bulk_import(node_models, dep_models)
+        return self.bulk_import(node_models, dep_models, arch_id)
 
-    def analyze_bottlenecks(self) -> Dict[str, Any]:
+    def analyze_bottlenecks(self, arch_id: str) -> Dict[str, Any]:
         """
         Executes Neo4j Cypher queries to identify dependency hubs and critical nodes.
         """
         from backend.db.queries import GET_BOTTLENECK_ANALYSIS_CYPHER
-        result = self.session.run(GET_BOTTLENECK_ANALYSIS_CYPHER)
+        result = self.session.run(GET_BOTTLENECK_ANALYSIS_CYPHER, {"arch_id": arch_id})
         
         critical_nodes = []
         total_in_degree = 0

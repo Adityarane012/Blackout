@@ -10,7 +10,7 @@ from backend.db.queries import (
 
 logger = logging.getLogger("neo4j_utils")
 
-def create_graph_node(session: Session, node: NodeModel) -> Dict[str, Any]:
+def create_graph_node(session: Session, node: NodeModel, arch_id: str) -> Dict[str, Any]:
     """
     Production-safe node insertion utility. 
     Applies the specific Neo4j category label based on Node type (e.g. :Database).
@@ -18,6 +18,7 @@ def create_graph_node(session: Session, node: NodeModel) -> Dict[str, Any]:
     type_label = node.get_neo4j_label()
     params = {
         "id": node.id,
+        "arch_id": arch_id,
         "label": node.label,
         "type": node.type,
         "status": node.status,
@@ -47,13 +48,14 @@ def create_graph_node(session: Session, node: NodeModel) -> Dict[str, Any]:
         logger.error(f"Failed to upsert node {node.id}: {err}")
         raise err
 
-def create_graph_relationship(session: Session, dep: DependencyModel) -> Dict[str, Any]:
+def create_graph_relationship(session: Session, dep: DependencyModel, arch_id: str) -> Dict[str, Any]:
     """
     Production-safe connection builder that establishes directed DEPENDS_ON links.
     """
     params = {
         "from_id": dep.from_id,
         "to_id": dep.to_id,
+        "arch_id": arch_id,
         "status": dep.status,
         "traffic": dep.traffic,
         "latency": dep.latency
@@ -72,7 +74,7 @@ def create_graph_relationship(session: Session, dep: DependencyModel) -> Dict[st
         logger.error(f"Exception raised linking dependencies: {err}")
         raise err
 
-def bulk_import_topology(session: Session, nodes: List[NodeModel], dependencies: List[DependencyModel]) -> Dict[str, Any]:
+def bulk_import_topology(session: Session, nodes: List[NodeModel], dependencies: List[DependencyModel], arch_id: str) -> Dict[str, Any]:
     """
     Transactional bulk-loader that builds an entire cybernetic network topology map in one atomic pass.
     """
@@ -87,6 +89,7 @@ def bulk_import_topology(session: Session, nodes: List[NodeModel], dependencies:
                 type_label = node.get_neo4j_label()
                 tx.run(UPSERT_NODE_CYPHER, {
                     "id": node.id,
+                    "arch_id": arch_id,
                     "label": node.label,
                     "type": node.type,
                     "status": node.status,
@@ -104,6 +107,7 @@ def bulk_import_topology(session: Session, nodes: List[NodeModel], dependencies:
                 tx.run(CREATE_DEPENDENCY_CYPHER, {
                     "from_id": dep.from_id,
                     "to_id": dep.to_id,
+                    "arch_id": arch_id,
                     "status": dep.status,
                     "traffic": dep.traffic,
                     "latency": dep.latency

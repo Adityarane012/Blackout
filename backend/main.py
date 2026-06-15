@@ -45,10 +45,10 @@ def upload_architecture(
     if not validation.valid:
         raise HTTPException(status_code=400, detail={"errors": validation.warnings})
         
-    # Phase 1/2: Persist to Neo4j
-    graph_service.load_architecture(nodes, edges)
-    
     arch_id = str(uuid.uuid4())
+    
+    # Phase 1/2: Persist to Neo4j
+    graph_service.load_architecture(nodes, edges, arch_id)
     
     if upload.user_id:
         graph_service.link_architecture_to_user(
@@ -66,10 +66,20 @@ def upload_architecture(
         "graph_health_score": validation.graph_health_score
     }
 
-@app.get("/v1/architectures", tags=["Architecture"])
-def get_architectures(graph_service: GraphService = Depends(get_graph_service)):
-    # Returns current topology
-    return graph_service.get_topology()
+@app.get("/v1/architectures/{arch_id}", tags=["Architecture"])
+def get_architecture(arch_id: str, graph_service: GraphService = Depends(get_graph_service)):
+    # Returns topology for specific arch_id
+    topology = graph_service.get_topology(arch_id)
+    if not topology.get("nodes"):
+        raise HTTPException(status_code=404, detail="Architecture not found")
+    return topology
+
+@app.delete("/v1/architectures/{arch_id}", tags=["Architecture"])
+def delete_architecture(arch_id: str, graph_service: GraphService = Depends(get_graph_service)):
+    # Delete an architecture's nodes and connections
+    query = "MATCH (n:InfraNode {arch_id: $arch_id}) DETACH DELETE n"
+    graph_service.session.run(query, {"arch_id": arch_id})
+    return {"status": "deleted", "id": arch_id}
 
 @app.get("/v1/scenarios", tags=["Scenarios"])
 def get_scenarios():
@@ -81,8 +91,12 @@ def run_simulation(
     trigger: Dict[str, Any],
     graph_service: GraphService = Depends(get_graph_service)
 ):
+    arch_id = trigger.get("archId")
+    if not arch_id:
+        raise HTTPException(status_code=400, detail="archId is required for simulation")
+        
     # Fetch latest topology from Neo4j
-    topology = graph_service.get_topology()
+    topology = graph_service.get_topology(arch_id)
     
     # Run deterministic traversal
     engine = SimulationEngine(topology)
@@ -105,6 +119,7 @@ def analyze_simulation(
 ):
     sim_id = payload.get("simulationId")
     scenario = payload.get("scenario", "unknown_scenario")
+    arch_id = payload.get("archId")
     
     sim_data = simulations_db.get(sim_id)
     if not sim_data:
@@ -112,10 +127,13 @@ def analyze_simulation(
         sim_data = {"timeline": [], "affectedNodes": [], "blastRadius": {}}
         
     # Bottleneck Analysis
-    bottlenecks = graph_service.analyze_bottlenecks()
+    if not arch_id:
+        raise HTTPException(status_code=400, detail="archId is required for analysis")
+        
+    bottlenecks = graph_service.analyze_bottlenecks(arch_id)
     
     # Reliability Scoring
-    topology = graph_service.get_topology()
+    topology = graph_service.get_topology(arch_id)
     total_nodes = len(topology.get("nodes", []))
     
     rel_svc = ReliabilityService()
@@ -133,7 +151,6 @@ def analyze_simulation(
     
     # Save to history if user_id and arch_id are provided
     user_id = payload.get("userId")
-    arch_id = payload.get("archId")
     if user_id and arch_id and sim_id:
         graph_service.save_simulation_history(
             clerk_id=user_id,

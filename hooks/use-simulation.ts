@@ -60,6 +60,14 @@ export function useSimulation() {
   const playbackIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const isPostMortemGeneratedRef = useRef(false)
   const archIdRef = useRef<string | null>(null)
+  const rootCauseRef = useRef<string | null>(null)
+
+  const [liveAnalysis, setLiveAnalysis] = useState<{
+    rootCause?: string;
+    primaryImpact?: string;
+    secondaryImpact?: string;
+    recommendation?: string;
+  } | null>(null)
 
   const selectedNode = selectedNodeId ? nodes.find((n) => n.id === selectedNodeId) ?? null : null
 
@@ -142,7 +150,8 @@ export function useSimulation() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           scenario: scenarioId,
-          target: targetId
+          target: targetId,
+          archId: archData.id
         })
       })
       
@@ -162,6 +171,53 @@ export function useSimulation() {
     triggerSimulation("custom_node_failure", nodeId)
   }, [triggerSimulation])
 
+  const triggerTargetedFault = useCallback(async (params: { targetNodeId: string, faultType: string, severity: string, duration: number }) => {
+    setCurrentScenario("targeted_fault")
+    addEvent("warning", `Injecting ${params.severity} ${params.faultType} into ${params.targetNodeId}...`, params.targetNodeId, true)
+    
+    setIsRunning(true)
+    setElapsedTime(0)
+    
+    try {
+      const archRes = await fetch("/v1/architectures", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId || undefined,
+          name: "Simulation Run",
+          graph: {
+            nodes: initialNodes,
+            edges: initialConnections.map(c => ({ source: c.from, target: c.to }))
+          }
+        })
+      })
+      if (!archRes.ok) throw new Error("Graph validation failed");
+      const archData = await archRes.json();
+      archIdRef.current = archData.id;
+      
+      const simRes = await fetch("/v1/simulations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scenario: "targeted_fault",
+          target: params.targetNodeId,
+          fault_type: params.faultType,
+          severity: params.severity,
+          duration: params.duration,
+          archId: archData.id
+        })
+      })
+      
+      const data = await simRes.json();
+      setSimulationId(data.id);
+      setPlaybackTimeline(data.timeline || []);
+    } catch (err) {
+      console.error(err)
+      addEvent("critical", "Simulation Engine Error: Failed to generate targeted timeline.")
+      setIsRunning(false)
+    }
+  }, [userId, initialNodes, initialConnections, addEvent])
+
   const injectRandomFailure = useCallback(() => {
     const activeNodes = nodes.filter((n) => n.status === "healthy")
     if (activeNodes.length === 0) return
@@ -172,17 +228,6 @@ export function useSimulation() {
   const triggerCascadeMode = useCallback(() => {
     setCurrentScenario("database_saturation")
     triggerSimulation("database_saturation", "db-1")
-  }, [triggerSimulation])
-
-  const handleScenarioChange = useCallback((scenario: { id: string; name: string }) => {
-    setCurrentScenario(scenario.id)
-    if (scenario.id === "black_friday_traffic") {
-      triggerSimulation("black_friday_traffic")
-    } else if (scenario.id === "database_saturation") {
-      triggerSimulation("database_saturation", "db-1")
-    } else if (scenario.id === "retry_storm") {
-      triggerSimulation("retry_storm", "api-gateway")
-    }
   }, [triggerSimulation])
 
   // Playback Loop
@@ -204,12 +249,51 @@ export function useSimulation() {
         if (tickEvents.length > 0) {
           setNodes(currentNodes => {
             let updatedNodes = [...currentNodes]
+            
+            // For live analysis
+            let newFailed: string[] = []
+            let newStressed: string[] = []
+
             tickEvents.forEach(ev => {
-              addEvent(ev.state === "FAILED" ? "critical" : "warning", ev.message, ev.nodeId, true)
-              updatedNodes = updatedNodes.map(n => 
-                n.id === ev.nodeId ? { ...n, status: ev.state.toLowerCase() as any } : n
-              )
+              addEvent(ev.state === "FAILED" ? "critical" : ev.state === "STRESSED" ? "warning" : "info", ev.message, ev.nodeId, true)
+              
+              if (ev.state === "FAILED") newFailed.push(ev.nodeId)
+              if (ev.state === "STRESSED" || ev.state === "DEGRADED") newStressed.push(ev.nodeId)
+
+              updatedNodes = updatedNodes.map(n => {
+                if (n.id === ev.nodeId) {
+                  const newStatus = ev.state.toLowerCase() as any
+                  let newLoad = n.load
+                  if (newStatus === "failed") newLoad = 0
+                  if (newStatus === "stress") newLoad = Math.min(100, n.load + 40)
+                  if (newStatus === "degraded") newLoad = Math.min(90, n.load + 20)
+                  return { ...n, status: newStatus, load: newLoad }
+                }
+                return n
+              })
             })
+
+            // Update live analysis
+            setLiveAnalysis(prev => {
+              const rootCause = prev?.rootCause || (newFailed.length > 0 ? updatedNodes.find(n => n.id === newFailed[0])?.label : undefined)
+              const primaryImpact = prev?.primaryImpact || (newFailed.length > 1 ? updatedNodes.find(n => n.id === newFailed[1])?.label : (newStressed.length > 0 ? updatedNodes.find(n => n.id === newStressed[0])?.label : undefined))
+              const secondaryImpact = newStressed.length > 1 ? updatedNodes.find(n => n.id === newStressed[newStressed.length-1])?.label : prev?.secondaryImpact
+              
+              let recommendation = "Monitor system health."
+              if (rootCause && primaryImpact) {
+                 recommendation = `Introduce circuit breakers between ${rootCause} and ${primaryImpact}.`
+              } else if (rootCause) {
+                 recommendation = `Scale up redundancy for ${rootCause}.`
+              }
+
+              return {
+                rootCause,
+                primaryImpact: primaryImpact !== rootCause ? primaryImpact : undefined,
+                secondaryImpact: secondaryImpact !== primaryImpact ? secondaryImpact : undefined,
+                recommendation
+              }
+            })
+
             return updatedNodes
           })
           
@@ -248,6 +332,7 @@ export function useSimulation() {
     setElapsedTime(0)
     setPlaybackTimeline([])
     setSimulationId(null)
+    setLiveAnalysis(null)
     setEvents([
       { id: "reset-1", timestamp: new Date(), type: "info", message: "Simulation grid restored." },
     ])
@@ -257,6 +342,15 @@ export function useSimulation() {
     setPostMortemScore(100)
     setIsPostMortemOpen(false)
   }, [initialNodes, initialConnections])
+
+  const handleScenarioChange = useCallback((scenario: { id: string; name: string }) => {
+    setCurrentScenario(scenario.id)
+    if (scenario.id === "normal") {
+      resetSimulation()
+    } else {
+      triggerSimulation(scenario.id)
+    }
+  }, [triggerSimulation, resetSimulation])
 
   const loadCustomTopology = useCallback((customNodes: InfraNode[]) => {
     const customConns = generateConnections(customNodes)
@@ -275,6 +369,33 @@ export function useSimulation() {
     setPostMortemReport("")
     setIsPostMortemOpen(false)
   }, [])
+
+  const loadArchitectureFromBackend = useCallback(async (archId: string) => {
+    try {
+      const res = await fetch(`/v1/architectures/${archId}`)
+      if (!res.ok) throw new Error("Architecture not found")
+      const data = await res.json()
+      
+      archIdRef.current = archId
+      setInitialNodes(data.nodes)
+      setInitialConnections(data.connections)
+      setNodes(data.nodes)
+      setConnections(data.connections)
+      setSelectedNodeId(null)
+      setElapsedTime(0)
+      setIsRunning(false)
+      setEvents([
+        { id: "load-1", timestamp: new Date(), type: "info", message: `Architecture loaded successfully.` }
+      ])
+      eventIdRef.current = 2
+      isPostMortemGeneratedRef.current = false
+      setPostMortemReport("")
+      setIsPostMortemOpen(false)
+    } catch (err) {
+      console.error(err)
+      addEvent("critical", "Failed to load architecture from backend.")
+    }
+  }, [addEvent])
 
   const saveCurrentArchitecture = useCallback(async (name: string) => {
     if (!userId) return;
@@ -314,11 +435,13 @@ export function useSimulation() {
     elapsedTime,
     addEvent,
     triggerNodeFailure,
+    triggerTargetedFault,
     injectRandomFailure,
     triggerCascadeMode,
     resetSimulation,
     handleScenarioChange,
     loadCustomTopology,
+    loadArchitectureFromBackend,
     isAnalyzingPostMortem,
     postMortemReport,
     postMortemScore,
@@ -327,5 +450,6 @@ export function useSimulation() {
     generatePostMortemReport: () => simulationId && generatePostMortemReport(simulationId, currentScenario),
     blastRadiusNodeIds,
     saveCurrentArchitecture,
+    liveAnalysis
   }
 }
