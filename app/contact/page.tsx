@@ -129,8 +129,6 @@ export default function ContactPage() {
               <ul className="space-y-3">
                 <li><Link href="/docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center justify-between group"><span>Documentation</span> <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
                 <li><Link href="/docs/api" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center justify-between group"><span>API Reference</span> <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
-                <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center justify-between group"><span>System Status</span> <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
-                <li><Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center justify-between group"><span>Engineering Blog</span> <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" /></Link></li>
               </ul>
             </div>
 
