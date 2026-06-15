@@ -8,6 +8,30 @@ import { Badge } from "@/components/ui/badge"
 
 const changelog = [
   {
+    version: "v1.2.0",
+    date: "June 15, 2026",
+    title: "User Persistence & Cloud Profiles",
+    description: "Added lightweight Clerk authentication and integrated a persistent Neo4j backend to save your architectures, simulation history, and AI resilience reports.",
+    changes: [
+      {
+        type: "feature",
+        items: [
+          "Integrated Clerk Next.js App Router authentication with custom themed login/signup flows.",
+          "Created User Dashboard to track saved Architectures, recent Simulations, and Average Resilience metrics.",
+          "Updated Simulation Engine and Workspace Header to allow saving architectures to a cloud profile.",
+          "Added User nodes to Neo4j to properly map OWNS and RAN relationships for all user data."
+        ]
+      },
+      {
+        type: "improvement",
+        items: [
+          "Added missing API Reference documentation index page.",
+          "Fixed reactive styling on Documentation Table of Contents."
+        ]
+      }
+    ]
+  },
+  {
     version: "v1.1.0",
     date: "June 15, 2026",
     title: "Platform UI Overhaul: A Premium Developer Experience",
