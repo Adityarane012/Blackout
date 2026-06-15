@@ -131,5 +131,6 @@ When running Next.js development servers on Windows, local antivirus tools (such
 
 ## 📂 Codebase Navigation & Architecture
 
-For a deep dive into the simulation mathematics (easing formulas, failover distribution models, and state loops), check out the master walkthrough guide:
-* 📄 **[Codebase Architecture Guide](file:///C:/Users/Aditya%20Rane/.gemini/antigravity/brain/41d51779-2d07-45fd-969f-46907529d4cf/codebase_architecture_guide.md)**
+For a deep dive into the simulation architecture, check out the documentation:
+* 📄 **[Technical Requirements Document](Docs/Technical%20Requirements%20Document%20(TRD).md)**
+* 📄 **[Backend Schema](Docs/Backend%20Schema.md)**
