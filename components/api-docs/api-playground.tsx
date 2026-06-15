@@ -52,7 +52,7 @@ print(simulation.predicted_blast_radius)`
   }
 
   return (
-    <aside className="fixed top-14 right-0 z-30 hidden w-1/2 lg:w-[45%] xl:w-[50%] shrink-0 overflow-y-auto border-l border-border/50 bg-[#0d0d0d] lg:block h-[calc(100vh-3.5rem)] pt-12 px-8">
+    <aside className="fixed top-14 right-0 z-30 hidden w-1/2 lg:w-[45%] xl:w-[50%] shrink-0 overflow-y-auto border-l border-border/50 bg-[#0d0d0d] lg:block h-[calc(100vh-3.5rem)] pt-12 px-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       
       <div className="w-full max-w-xl mx-auto space-y-12">
         

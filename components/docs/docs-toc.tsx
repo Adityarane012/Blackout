@@ -5,7 +5,7 @@ import { ExternalLink } from "lucide-react"
 
 export function DocsTOC() {
   return (
-    <aside className="fixed top-14 right-0 z-30 hidden w-64 shrink-0 overflow-y-auto border-l border-border/50 bg-background/50 backdrop-blur-sm xl:block pb-10">
+    <aside className="fixed top-14 right-0 z-30 hidden w-64 shrink-0 overflow-y-auto border-l border-border/50 bg-background/50 backdrop-blur-sm xl:block pb-10 h-[calc(100vh-3.5rem)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <div className="px-6 py-8">
         <div className="space-y-6">
           
