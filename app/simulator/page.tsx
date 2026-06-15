@@ -47,6 +47,7 @@ export default function SimulatorPage() {
     isPostMortemOpen,
     setIsPostMortemOpen,
     blastRadiusNodeIds,
+    saveCurrentArchitecture,
   } = useSimulation()
 
   const handleNodeClick = useCallback(
@@ -69,6 +70,7 @@ export default function SimulatorPage() {
         currentScenario={currentScenario}
         onOpenImport={() => setIsImportModalOpen(true)}
         onAbort={handleAbortSimulation}
+        onSaveArchitecture={() => saveCurrentArchitecture("My Custom Architecture")}
       />
 
       <div className="flex flex-1 overflow-hidden min-h-0">

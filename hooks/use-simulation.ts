@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import type { Connection, InfraNode } from "@/components/network-graph"
 import type { Event as SimEvent } from "@/components/event-log"
 import { getInitialState } from "@/lib/propagation"
+import { useAuth } from "@clerk/nextjs"
 
 const EVENT_THROTTLE_MS = 1500
 const MIN_TICK_MS = 1000
@@ -29,6 +30,7 @@ export function generateConnections(nodes: InfraNode[]): Connection[] {
 }
 
 export function useSimulation() {
+  const { userId } = useAuth()
   const initialState = getInitialState();
   const [initialNodes, setInitialNodes] = useState<InfraNode[]>(initialState.nodes)
   const [initialConnections, setInitialConnections] = useState<Connection[]>(initialState.connections)
@@ -57,6 +59,7 @@ export function useSimulation() {
   const eventIdRef = useRef(2)
   const playbackIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const isPostMortemGeneratedRef = useRef(false)
+  const archIdRef = useRef<string | null>(null)
 
   const selectedNode = selectedNodeId ? nodes.find((n) => n.id === selectedNodeId) ?? null : null
 
@@ -89,7 +92,9 @@ export function useSimulation() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           simulationId: simId,
-          scenario: scenarioName
+          scenario: scenarioName,
+          userId: userId || undefined,
+          archId: archIdRef.current || undefined
         })
       });
       const data = await res.json();
@@ -119,6 +124,8 @@ export function useSimulation() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          user_id: userId || undefined,
+          name: "Simulation Run",
           graph: {
             nodes: initialNodes,
             edges: initialConnections.map(c => ({ source: c.from, target: c.to }))
@@ -126,6 +133,8 @@ export function useSimulation() {
         })
       })
       if (!archRes.ok) throw new Error("Graph validation failed");
+      const archData = await archRes.json();
+      archIdRef.current = archData.id;
       
       // 2. Trigger the simulation traverse
       const simRes = await fetch("/v1/simulations", {
@@ -267,6 +276,30 @@ export function useSimulation() {
     setIsPostMortemOpen(false)
   }, [])
 
+  const saveCurrentArchitecture = useCallback(async (name: string) => {
+    if (!userId) return;
+    try {
+      const archRes = await fetch("/v1/architectures", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId,
+          name: name,
+          environment: "production",
+          graph: {
+            nodes: initialNodes,
+            edges: initialConnections.map(c => ({ source: c.from, target: c.to }))
+          }
+        })
+      })
+      if (!archRes.ok) throw new Error("Failed to save");
+      addEvent("info", `Architecture '${name}' saved to your dashboard.`);
+    } catch(err) {
+      console.error(err);
+      addEvent("critical", "Failed to save architecture.");
+    }
+  }, [userId, initialNodes, initialConnections, addEvent]);
+
   return {
     nodes,
     connections,
@@ -293,5 +326,6 @@ export function useSimulation() {
     setIsPostMortemOpen,
     generatePostMortemReport: () => simulationId && generatePostMortemReport(simulationId, currentScenario),
     blastRadiusNodeIds,
+    saveCurrentArchitecture,
   }
 }

@@ -9,6 +9,7 @@ class ArchitectureUploadModel(BaseModel):
     """
     name: Optional[str] = "Unnamed Architecture"
     environment: Optional[str] = "production"
+    user_id: Optional[str] = None
     graph: Dict[str, Any] = Field(
         ..., 
         description="Must contain 'nodes' and 'edges' arrays."

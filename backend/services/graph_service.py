@@ -5,7 +5,12 @@ from backend.db.queries import (
     GET_ALL_NODES_CYPHER,
     GET_ALL_DEPENDENCIES_CYPHER,
     UPDATE_NODE_TELEMETRY_CYPHER,
-    TRACE_CASCADE_BLAST_RADIUS_CYPHER
+    TRACE_CASCADE_BLAST_RADIUS_CYPHER,
+    MERGE_USER_CYPHER,
+    LINK_USER_TO_ARCH_CYPHER,
+    SAVE_SIMULATION_HISTORY_CYPHER,
+    GET_USER_ARCHITECTURES_CYPHER,
+    GET_USER_SIMULATIONS_CYPHER
 )
 from backend.db.utils import create_graph_node, create_graph_relationship, bulk_import_topology
 
@@ -125,3 +130,35 @@ class GraphService:
             "criticalNodes": critical_nodes,
             "riskScore": risk_score
         }
+
+    # User Persistence Methods
+    def ensure_user(self, clerk_id: str) -> None:
+        self.session.run(MERGE_USER_CYPHER, {"clerk_id": clerk_id})
+
+    def link_architecture_to_user(self, clerk_id: str, arch_id: str, name: str, environment: str, nodes_count: int) -> None:
+        self.ensure_user(clerk_id)
+        self.session.run(LINK_USER_TO_ARCH_CYPHER, {
+            "clerk_id": clerk_id,
+            "arch_id": arch_id,
+            "name": name,
+            "environment": environment,
+            "nodes_count": nodes_count
+        })
+
+    def save_simulation_history(self, clerk_id: str, arch_id: str, sim_id: str, scenario: str, score: int) -> None:
+        self.ensure_user(clerk_id)
+        self.session.run(SAVE_SIMULATION_HISTORY_CYPHER, {
+            "clerk_id": clerk_id,
+            "arch_id": arch_id,
+            "sim_id": sim_id,
+            "scenario": scenario,
+            "score": score
+        })
+
+    def get_user_architectures(self, clerk_id: str) -> List[Dict[str, Any]]:
+        result = self.session.run(GET_USER_ARCHITECTURES_CYPHER, {"clerk_id": clerk_id})
+        return [rec["architecture"] for rec in result]
+
+    def get_user_simulations(self, clerk_id: str) -> List[Dict[str, Any]]:
+        result = self.session.run(GET_USER_SIMULATIONS_CYPHER, {"clerk_id": clerk_id})
+        return [rec["simulation"] for rec in result]

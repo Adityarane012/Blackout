@@ -48,8 +48,19 @@ def upload_architecture(
     # Phase 1/2: Persist to Neo4j
     graph_service.load_architecture(nodes, edges)
     
+    arch_id = str(uuid.uuid4())
+    
+    if upload.user_id:
+        graph_service.link_architecture_to_user(
+            clerk_id=upload.user_id,
+            arch_id=arch_id,
+            name=upload.name or "Unnamed Architecture",
+            environment=upload.environment or "production",
+            nodes_count=len(nodes)
+        )
+    
     return {
-        "id": str(uuid.uuid4()),
+        "id": arch_id,
         "valid": True,
         "warnings": validation.warnings,
         "graph_health_score": validation.graph_health_score
@@ -120,9 +131,29 @@ def analyze_simulation(
     ai_svc = AnalysisService()
     report = ai_svc.generate_report(sim_data["timeline"], bottlenecks, scenario)
     
+    # Save to history if user_id and arch_id are provided
+    user_id = payload.get("userId")
+    arch_id = payload.get("archId")
+    if user_id and arch_id and sim_id:
+        graph_service.save_simulation_history(
+            clerk_id=user_id,
+            arch_id=arch_id,
+            sim_id=sim_id,
+            scenario=scenario,
+            score=score_data["reliabilityScore"]
+        )
+    
     return {
         "reliabilityScore": score_data["reliabilityScore"],
         "severity": score_data["severity"],
         "criticalNodes": bottlenecks["criticalNodes"],
         "report": report
     }
+
+@app.get("/v1/users/{user_id}/architectures", tags=["User Dashboard"])
+def get_user_architectures(user_id: str, graph_service: GraphService = Depends(get_graph_service)):
+    return graph_service.get_user_architectures(user_id)
+
+@app.get("/v1/users/{user_id}/simulations", tags=["User Dashboard"])
+def get_user_simulations(user_id: str, graph_service: GraphService = Depends(get_graph_service)):
+    return graph_service.get_user_simulations(user_id)

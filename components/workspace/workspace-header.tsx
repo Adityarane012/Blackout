@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { UserButton, SignInButton, useAuth } from "@clerk/nextjs"
 
 interface Scenario {
   id: string
@@ -27,6 +28,7 @@ interface WorkspaceHeaderProps {
   currentScenario: string
   onOpenImport: () => void
   onAbort: () => void
+  onSaveArchitecture?: () => void
 }
 
 export function WorkspaceHeader({
@@ -39,7 +41,9 @@ export function WorkspaceHeader({
   currentScenario,
   onOpenImport,
   onAbort,
+  onSaveArchitecture,
 }: WorkspaceHeaderProps) {
+  const { userId } = useAuth()
   const [isScenarioOpen, setIsScenarioOpen] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
 
@@ -209,6 +213,30 @@ export function WorkspaceHeader({
           <span>Ingest System</span>
         </button>
 
+        {/* Save Architecture */}
+        {userId ? (
+          <button
+            onClick={() => {
+              if (onSaveArchitecture) onSaveArchitecture()
+            }}
+            className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-500/50 rounded-lg text-cyan-400 font-mono text-xs uppercase tracking-wider transition-all duration-200 group"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+            </svg>
+            <span>Save</span>
+          </button>
+        ) : (
+          <SignInButton mode="modal">
+            <button className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-border rounded-lg text-zinc-300 font-mono text-xs uppercase tracking-wider transition-all duration-200 group">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+              <span>Sign in to Save</span>
+            </button>
+          </SignInButton>
+        )}
+
         <div className="flex items-center gap-2 px-3 py-1.5 bg-secondary/30 border border-border/30 rounded-lg">
           <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
           <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Live</span>
@@ -216,8 +244,9 @@ export function WorkspaceHeader({
 
         <div className="text-right">
           <div className="text-[10px] font-mono text-muted-foreground">Session</div>
-          <div className="text-xs font-mono text-foreground">{sessionId ? `SIM-${sessionId}` : "SIM-······"}</div>
+          <div className="text-xs font-mono text-foreground mr-2">{sessionId ? `SIM-${sessionId}` : "SIM-······"}</div>
         </div>
+        {userId && <UserButton afterSignOutUrl="/" />}
       </div>
     </header>
   )

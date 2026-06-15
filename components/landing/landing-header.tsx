@@ -4,9 +4,11 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { UserButton, useAuth } from "@clerk/nextjs"
 
 export function LandingHeader() {
   const pathname = usePathname()
+  const { userId } = useAuth()
 
   const navLinks = [
     { name: "Features", href: "/features" },
@@ -63,17 +65,40 @@ export function LandingHeader() {
 
         {/* CTA */}
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-muted-foreground hover:text-foreground">
-            Sign In
-          </Button>
-          <Link href="/simulator">
-            <Button
-              size="sm"
-              className="bg-cyan-500 hover:bg-cyan-400 text-background font-semibold glow-cyan"
-            >
-              Launch Simulator
-            </Button>
-          </Link>
+          {!userId ? (
+            <>
+              <Link href="/sign-in">
+                <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-muted-foreground hover:text-foreground">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/simulator">
+                <Button
+                  size="sm"
+                  className="bg-cyan-500 hover:bg-cyan-400 text-background font-semibold glow-cyan"
+                >
+                  Launch Simulator
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/dashboard">
+                <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-muted-foreground hover:text-foreground">
+                  Dashboard
+                </Button>
+              </Link>
+              <Link href="/simulator">
+                <Button
+                  size="sm"
+                  className="bg-cyan-500 hover:bg-cyan-400 text-background font-semibold glow-cyan mr-2"
+                >
+                  Simulator
+                </Button>
+              </Link>
+              <UserButton afterSignOutUrl="/" />
+            </>
+          )}
         </div>
       </div>
     </motion.header>
