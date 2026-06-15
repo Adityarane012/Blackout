@@ -22,8 +22,7 @@ const blackout = new Blackout(process.env.BLACKOUT_API_KEY);
 const simulation = await blackout.simulations.trigger({
   targetNodeId: "db-primary-us-east",
   severity: "COMPLETE_OUTAGE",
-  durationMs: 300000,
-  dryRun: true
+  durationMs: 300000
 });
 
 console.log(simulation.predictedBlastRadius);`
@@ -36,20 +35,18 @@ client = blackout.Client(api_key=os.environ.get("BLACKOUT_API_KEY"))
 simulation = client.simulations.trigger(
     target_node_id="db-primary-us-east",
     severity="COMPLETE_OUTAGE",
-    duration_ms=300000,
-    dry_run=True
+    duration_ms=300000
 )
 
 print(simulation.predicted_blast_radius)`
       default:
-        return `curl -X POST https://api.blackout.dev/v1/simulations/cascade \\
+        return `curl -X POST https://api.blackout.dev/v1/simulations \\
   -H "Authorization: Bearer $BLACKOUT_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
     "target_node_id": "db-primary-us-east",
     "severity": "COMPLETE_OUTAGE",
-    "duration_ms": 300000,
-    "dry_run": true
+    "duration_ms": 300000
   }'`
     }
   }

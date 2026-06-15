@@ -23,7 +23,7 @@ export function DocsContent() {
         
         <h2 className="text-2xl font-bold text-foreground mt-12 mb-6" id="overview">Overview</h2>
         <p className="text-muted-foreground">
-          Unlike traditional chaos engineering tools that rely on random network partitioning, BLACKOUT uses a deterministic graph traversal model. When a synthetic stress is injected into a node, the Cascade Engine evaluates the node's upstream dependents and calculates propagation probability based on historical retry-storm data.
+          BLACKOUT relies on a deterministic graph traversal model to simulate outages. When a synthetic stress is injected into a node, the Failure Propagation engine evaluates the node's upstream dependents and calculates the probability of cascading degradation.
         </p>
 
         {/* Note Callout */}
@@ -31,7 +31,7 @@ export function DocsContent() {
           <Info className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
           <div>
             <h5 className="font-semibold text-cyan-400 mb-1">Prerequisite</h5>
-            <p className="text-sm text-foreground/80 m-0">You must have an active architecture graph imported (via AWS integration or manual JSON definition) before initiating a cascade simulation.</p>
+            <p className="text-sm text-foreground/80 m-0">You must upload an Architecture Graph (via JSON definition) before initiating a failure simulation.</p>
           </div>
         </div>
 
@@ -39,12 +39,12 @@ export function DocsContent() {
         
         <h3 className="text-lg font-semibold text-foreground mt-8 mb-4">1. State Injection</h3>
         <p className="text-muted-foreground">
-          The engine modifies the state of a targeted node `N` from <span className="font-mono text-xs bg-card px-1.5 py-0.5 rounded border border-border">HEALTHY</span> to <span className="font-mono text-xs bg-card px-1.5 py-0.5 rounded border border-border text-amber-400">STRESS</span> or <span className="font-mono text-xs bg-card px-1.5 py-0.5 rounded border border-border text-red-400">FAILURE</span>.
+          The engine modifies the state of a targeted node `N` from <span className="font-mono text-xs bg-card px-1.5 py-0.5 rounded border border-border">HEALTHY</span> to <span className="font-mono text-xs bg-card px-1.5 py-0.5 rounded border border-border text-amber-400">STRESS</span> or <span className="font-mono text-xs bg-card px-1.5 py-0.5 rounded border border-border text-red-400">FAILURE</span> in the simulation state.
         </p>
 
         <h3 className="text-lg font-semibold text-foreground mt-8 mb-4">2. Deterministic Propagation</h3>
         <p className="text-muted-foreground">
-          If `N` is set to `FAILURE`, the engine immediately queries the graph for all nodes `M` where `M` depends on `N`. The state of `M` is degraded based on your defined resilience thresholds.
+          If `N` is set to `FAILURE`, the engine immediately queries the graph for all nodes `M` where `M` depends on `N`. The state of `M` is degraded based on standard cascading probabilities.
         </p>
 
         {/* Architecture Diagram Mockup */}
@@ -58,7 +58,7 @@ export function DocsContent() {
              </div>
              
              <div className="flex flex-col gap-1 items-center">
-                <span className="text-[10px] font-mono text-muted-foreground">timeout (5000ms)</span>
+                <span className="text-[10px] font-mono text-muted-foreground">dependency edge</span>
                 <div className="w-24 h-0.5 bg-gradient-to-r from-red-500 to-amber-500 relative">
                   <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-0 h-0 border-t-[4px] border-t-transparent border-l-[6px] border-l-amber-500 border-b-[4px] border-b-transparent" />
                 </div>
@@ -71,12 +71,12 @@ export function DocsContent() {
                <span className="text-xs text-muted-foreground uppercase">Stress (Retry Storm)</span>
              </div>
            </div>
-           <p className="text-xs text-muted-foreground mt-8 text-center max-w-sm">Fig 1. Upstream propagation of database failure causing an API gateway retry storm.</p>
+           <p className="text-xs text-muted-foreground mt-8 text-center max-w-sm">Fig 1. Upstream propagation of database failure causing an API gateway degradation.</p>
         </div>
 
         <h2 className="text-2xl font-bold text-foreground mt-12 mb-6" id="trigger">Triggering a simulation</h2>
         <p className="text-muted-foreground">
-          You can initiate a cascade manually via the dashboard, or programmatically using the BLACKOUT CLI.
+          Simulations are safe, predictive exercises. Trigger them via the Dashboard UI or through the REST API by specifying your target node.
         </p>
 
         {/* Code Block Mockup */}
@@ -92,20 +92,19 @@ export function DocsContent() {
           </div>
           <div className="p-4 overflow-x-auto">
             <pre className="text-sm font-mono leading-loose">
-              <span className="text-purple-400">blackout</span> simulate cascade \<br/>
-              <span className="text-zinc-400">  --target</span>=<span className="text-green-400">"db-primary-us-east"</span> \<br/>
-              <span className="text-zinc-400">  --duration</span>=<span className="text-orange-400">300s</span> \<br/>
-              <span className="text-zinc-400">  --severity</span>=<span className="text-red-400">CRITICAL</span>
+              <span className="text-purple-400">curl</span> -X POST https://api.blackout.dev/v1/simulations \<br/>
+              <span className="text-zinc-400">  -H</span> <span className="text-green-400">"Authorization: Bearer $API_KEY"</span> \<br/>
+              <span className="text-zinc-400">  -d</span> <span className="text-green-400">'{'{"'}target_node_id": "db-primary-us-east", "severity": "CRITICAL"{'"}'}'</span>
             </pre>
           </div>
         </div>
 
-        {/* Warning Callout */}
-        <div className="my-8 p-4 rounded-xl border border-red-500/20 bg-red-500/5 flex gap-4">
-          <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+        {/* Simulation Safety Callout */}
+        <div className="my-8 p-4 rounded-xl border border-green-500/20 bg-green-500/5 flex gap-4">
+          <CheckCircle2 className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
           <div>
-            <h5 className="font-semibold text-red-400 mb-1">Production Warning</h5>
-            <p className="text-sm text-foreground/80 m-0">Do not attach the CLI to a live production cluster unless the <code className="text-xs bg-red-500/10 text-red-400 px-1 py-0.5 rounded">--dry-run</code> flag is explicitly set. The engine will modify actual load balancer routing weights if configured.</p>
+            <h5 className="font-semibold text-green-400 mb-1">Predictive Safety</h5>
+            <p className="text-sm text-foreground/80 m-0">BLACKOUT operates entirely on your uploaded architecture model. Simulations are safely isolated and do not modify live infrastructure or network traffic.</p>
           </div>
         </div>
 

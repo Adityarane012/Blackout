@@ -7,41 +7,40 @@ const navGroups = [
     title: "Getting Started",
     links: [
       { title: "Introduction", href: "/docs", active: false },
-      { title: "Quickstart", href: "#", active: false },
+      { title: "Quick Start", href: "#", active: false },
       { title: "Architecture Upload", href: "#", active: false },
     ]
   },
   {
     title: "Core Concepts",
     links: [
-      { title: "Node Topologies", href: "#", active: false },
-      { title: "Dependency Graphs", href: "#", active: false },
-      { title: "State Machines", href: "#", active: false },
+      { title: "Infrastructure Graphs", href: "#", active: false },
+      { title: "Dependencies", href: "#", active: false },
+      { title: "Simulation States", href: "#", active: false },
     ]
   },
   {
     title: "Simulation Engine",
     links: [
-      { title: "Overview", href: "#", active: false },
       { title: "Scenario Generation", href: "#", active: false },
-      { title: "Cascade Failure", href: "/docs", active: true },
-      { title: "Network Partitioning", href: "#", active: false },
+      { title: "Failure Propagation", href: "/docs", active: true },
+      { title: "Reliability Scoring", href: "#", active: false },
     ]
   },
   {
     title: "AI Analysis",
     links: [
-      { title: "Blast Radius Detection", href: "#", active: false },
-      { title: "Root Cause Prediction", href: "#", active: false },
-      { title: "Reliability Scoring", href: "#", active: false },
+      { title: "Root Cause Analysis", href: "#", active: false },
+      { title: "Bottleneck Detection", href: "#", active: false },
+      { title: "Resilience Insights", href: "#", active: false },
     ]
   },
   {
     title: "API Reference",
     links: [
-      { title: "Authentication", href: "#", active: false },
-      { title: "Simulations API", href: "#", active: false },
-      { title: "Graph Export API", href: "#", active: false },
+      { title: "Architectures", href: "/docs/api", active: false },
+      { title: "Simulations", href: "#", active: false },
+      { title: "Analysis", href: "#", active: false },
     ]
   }
 ]

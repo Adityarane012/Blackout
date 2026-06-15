@@ -4,41 +4,23 @@ import Link from "next/link"
 
 const apiGroups = [
   {
-    title: "Authentication",
+    title: "Architectures",
     links: [
-      { method: "POST", title: "Create API Key", href: "#", active: false },
-      { method: "DELETE", title: "Revoke API Key", href: "#", active: false },
+      { method: "POST", title: "Upload Graph", href: "#", active: false },
+      { method: "GET", title: "Get Topology", href: "#", active: false },
     ]
   },
   {
-    title: "Architecture APIs",
+    title: "Simulations",
     links: [
-      { method: "POST", title: "Import Topology", href: "#", active: false },
-      { method: "GET", title: "List Nodes", href: "#", active: false },
-      { method: "GET", title: "Get Dependency Graph", href: "#", active: false },
+      { method: "POST", title: "Trigger Simulation", href: "#", active: true },
+      { method: "GET", title: "Get Results", href: "#", active: false },
     ]
   },
   {
-    title: "Simulation APIs",
+    title: "Analysis",
     links: [
-      { method: "GET", title: "List Simulations", href: "#", active: false },
-      { method: "POST", title: "Trigger Cascade", href: "#", active: true },
-      { method: "POST", title: "Inject Latency", href: "#", active: false },
-      { method: "DELETE", title: "Halt Simulation", href: "#", active: false },
-    ]
-  },
-  {
-    title: "Analysis APIs",
-    links: [
-      { method: "GET", title: "Get Blast Radius", href: "#", active: false },
-      { method: "GET", title: "Root Cause Prediction", href: "#", active: false },
-    ]
-  },
-  {
-    title: "Metrics & Reporting",
-    links: [
-      { method: "GET", title: "Reliability Score", href: "#", active: false },
-      { method: "GET", title: "Export PDF Report", href: "#", active: false },
+      { method: "GET", title: "Get Reliability Score", href: "#", active: false },
     ]
   }
 ]
