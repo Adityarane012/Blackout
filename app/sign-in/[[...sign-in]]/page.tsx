@@ -142,11 +142,19 @@ export default function SignInPage() {
               variables: {
                 colorPrimary: '#06b6d4',
                 colorBackground: 'transparent',
-                colorText: 'white',
-                colorTextSecondary: '#a1a1aa',
                 colorDanger: '#ef4444',
                 colorSuccess: '#22c55e',
                 colorWarning: '#f59e0b',
+              },
+              elements: {
+                headerTitle: "text-white font-bold",
+                headerSubtitle: "text-zinc-400",
+                socialButtonsBlockButtonText: "text-white font-medium",
+                dividerText: "text-zinc-500",
+                formFieldLabel: "text-zinc-300",
+                formFieldInput: "text-white bg-zinc-900/50 border-zinc-800",
+                footerActionText: "text-zinc-400",
+                footerActionLink: "text-cyan-400 hover:text-cyan-300"
               }
             }}
             routing="path" 
