@@ -83,8 +83,7 @@ Open **[http://localhost:3000/simulator](http://localhost:3000/simulator)**, aut
   * Full-Stack Engineering, Graph Database Architecture, SRE Modeling, UI/UX Design.
 
 ## 🔗 Demo Link
-* **Live Deployment:** `[I will provide later]`
-* **Video Presentation:** `[I will provide later]`
+* **Live Deployment:** `https://blackout-rouge.vercel.app/`
 
 ---
 <div align="center">
