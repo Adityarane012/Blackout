@@ -70,12 +70,12 @@ export function LegalLayout({ title, lastUpdated, description, sections, childre
                 {sections.map((section) => (
                   <a
                     key={section.id}
-                    href={\`#\${section.id}\`}
-                    className={\`text-sm py-1.5 px-3 rounded-md transition-colors \${
+                    href={`#${section.id}`}
+                    className={`text-sm py-1.5 px-3 rounded-md transition-colors ${
                       activeSection === section.id 
                         ? "bg-cyan-500/10 text-cyan-400 font-medium" 
                         : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                    }\`}
+                    }`}
                   >
                     {section.title}
                   </a>
