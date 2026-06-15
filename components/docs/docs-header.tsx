@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Search, Github, Twitter, TerminalSquare } from "lucide-react"
+import { Search, Github, Linkedin, TerminalSquare } from "lucide-react"
 
 export function DocsHeader() {
   return (
@@ -14,9 +14,8 @@ export function DocsHeader() {
           </Link>
           
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-            <Link href="/docs" className="text-foreground transition-colors">Documentation</Link>
-            <Link href="/docs/api" className="hover:text-foreground transition-colors">API Reference</Link>
-            <Link href="/docs/guides" className="hover:text-foreground transition-colors">Guides</Link>
+            <Link href="/docs/getting-started/introduction" className="text-foreground transition-colors">Documentation</Link>
+            <Link href="/docs/api/architectures" className="hover:text-foreground transition-colors">API Reference</Link>
           </nav>
         </div>
 
@@ -39,8 +38,8 @@ export function DocsHeader() {
             <Link href="https://github.com/Adityarane012/Blackout" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">
               <Github className="w-5 h-5" />
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Twitter className="w-5 h-5" />
+            <Link href="https://www.linkedin.com/in/aditya-rane-" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Linkedin className="w-5 h-5" />
             </Link>
           </nav>
         </div>

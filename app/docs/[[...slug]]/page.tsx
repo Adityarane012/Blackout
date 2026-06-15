@@ -5,8 +5,9 @@ import { DocsContent } from "@/components/docs/docs-content"
 import { getDocBySlug } from "@/lib/docs"
 import { notFound } from "next/navigation"
 
-export default async function DocsPage({ params }: { params: { slug?: string[] } }) {
-  const slug = params.slug || []
+export default async function DocsPage({ params }: { params: Promise<{ slug?: string[] }> }) {
+  const resolvedParams = await params
+  const slug = resolvedParams.slug || []
   const doc = getDocBySlug(slug)
 
   if (!doc) {

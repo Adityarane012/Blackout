@@ -5,9 +5,16 @@ import ReactMarkdown from "react-markdown"
 import type { DocContent } from "@/lib/docs"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
+import { navGroups } from "@/components/docs/docs-sidebar"
 
 export function DocsContent({ doc }: { doc?: DocContent }) {
   const pathname = usePathname()
+
+  // Calculate prev and next links
+  const allLinks = navGroups.flatMap(g => g.links)
+  const currentIndex = allLinks.findIndex(l => l.href === pathname || (pathname === '/docs' && l.href === '/docs/getting-started/introduction'))
+  const prevLink = currentIndex > 0 ? allLinks[currentIndex - 1] : null
+  const nextLink = currentIndex < allLinks.length - 1 && currentIndex !== -1 ? allLinks[currentIndex + 1] : null
 
   if (!doc) {
     return (
@@ -88,20 +95,27 @@ export function DocsContent({ doc }: { doc?: DocContent }) {
       </div>
 
       {/* Prev / Next Footer */}
-      <div className="mt-20 pt-8 border-t border-border/50 flex items-center justify-between">
-        <Link href="#" className="flex flex-col gap-2 group text-left">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider">Previous</span>
-          <span className="text-sm font-medium text-foreground group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-            <ChevronLeft className="w-4 h-4" /> Previous Topic
-          </span>
-        </Link>
-        <Link href="#" className="flex flex-col gap-2 group text-right">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider">Next</span>
-          <span className="text-sm font-medium text-foreground group-hover:text-cyan-400 transition-colors flex items-center gap-2">
-            Next Topic <ChevronRight className="w-4 h-4" />
-          </span>
-        </Link>
-      </div>
+      {(prevLink || nextLink) && (
+        <div className="mt-20 pt-8 border-t border-border/50 flex items-center justify-between">
+          {prevLink ? (
+            <Link href={prevLink.href} className="flex flex-col gap-2 group text-left">
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">Previous</span>
+              <span className="text-sm font-medium text-foreground group-hover:text-cyan-400 transition-colors flex items-center gap-2">
+                <ChevronLeft className="w-4 h-4" /> {prevLink.title}
+              </span>
+            </Link>
+          ) : <div />}
+          
+          {nextLink ? (
+            <Link href={nextLink.href} className="flex flex-col gap-2 group text-right">
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">Next</span>
+              <span className="text-sm font-medium text-foreground group-hover:text-cyan-400 transition-colors flex items-center gap-2">
+                {nextLink.title} <ChevronRight className="w-4 h-4" />
+              </span>
+            </Link>
+          ) : <div />}
+        </div>
+      )}
 
     </div>
   )

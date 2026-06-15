@@ -1,755 +1,153 @@
 # BLACKOUT
 
-### _“Predict the outage before the world sees it.”_
+### _“Predict the cascade before the world sees it.”_
 
 ---
 
 # 1. Product Overview
 
 ## Product Name
-
 BLACKOUT
 
 ---
 
 ## Product Category
-
-AI-Powered Software Failure Simulation Engine
+Predictive Failure Simulation Engine
 
 ---
 
 ## Product Vision
+BLACKOUT is a predictive failure simulation platform designed to mathematically model how software ecosystems collapse under chaotic conditions.
 
-BLACKOUT is an AI-native failure simulation platform that predicts how software ecosystems collapse under chaotic real-world conditions before deployment.
-
-The platform generates synthetic outage realities using AI and visualizes cascading infrastructure failures in real time.
-
-Unlike traditional testing systems that rely on predefined test cases, BLACKOUT dynamically creates unknown stress scenarios and simulates how failures propagate across interconnected systems.
+Unlike traditional testing systems that rely on random network drops in live environments (chaos engineering), BLACKOUT operates purely on imported Architecture Graphs. It uses deterministic graph traversal algorithms to predict how a localized failure will propagate across dependency chains.
 
 ---
 
 ## One-Line Positioning
-
-> “BLACKOUT creates AI-generated synthetic outage environments to predict infrastructure failures before users experience them.”
+> “BLACKOUT uses deterministic graph modeling to predict infrastructure failure cascades before they happen.”
 
 ---
 
 # 2. Problem Statement
 
 Modern software teams face major reliability challenges:
-
-- failures discovered after deployment
-    
-- inability to simulate unpredictable user behavior
-    
-- hidden infrastructure bottlenecks
-    
-- cascading outages across dependencies
-    
-- limited visibility into architectural weak points
-    
-- reactive debugging workflows
-    
+- Cascading outages caused by hidden dependencies.
+- Retry storms that amplify minor latency spikes.
+- Live chaos engineering tools that are too dangerous to run in production.
 
 Traditional testing tools:
+- Validate expected behavior only.
+- Test isolated components instead of interconnected systems.
+- Cannot safely simulate entire region outages or complex architectural collapse.
 
-- validate expected behavior only
-    
-- use static predefined conditions
-    
-- fail to model real-world chaos
-    
-
-As systems become more distributed and interconnected, unpredictable failure chains become increasingly difficult to detect before production.
+As systems become more distributed, predicting how a failure in Service A affects Service D requires more than just load testing—it requires architectural modeling.
 
 ---
 
 # 3. Product Goal
 
 BLACKOUT aims to:
-
-- simulate software ecosystem collapse before deployment
-    
-- generate AI-driven synthetic outage scenarios
-    
-- visualize cascading infrastructure failures
-    
-- predict resilience weaknesses
-    
-- improve deployment confidence for engineering teams
-    
+- Ingest physical infrastructure architectures into mathematical Digraphs.
+- Simulate localized failure scenarios (Latency Spikes, Total Outages).
+- Calculate the deterministic spread of failures across upstream dependencies.
+- Pinpoint architectural bottlenecks and structural single points of failure.
+- Generate actionable Resilience Insights to prevent outages.
 
 ---
 
 # 4. Target Users
 
 ## Primary Users
-
-- software developers
-    
-- DevOps engineers
-    
-- startup engineering teams
-    
-- platform engineers
-    
-- SRE teams
-    
-- product engineering organizations
-    
-
----
+- Software Developers
+- Platform Engineers
+- Site Reliability Engineers (SREs)
 
 ## User Needs
-
-Users need:
-
-- earlier failure detection
-    
-- deployment confidence
-    
-- infrastructure visibility
-    
-- realistic stress simulation
-    
-- bottleneck identification
-    
-- reliability insights
-    
+- Safe, predictive environments to test disaster recovery.
+- Clear visualization of how failures travel up a dependency stack.
+- Automated Root Cause Analysis to identify exactly which node caused a system collapse.
 
 ---
 
 # 5. Core Product Concept
 
-BLACKOUT functions as:
+BLACKOUT functions as a **digital twin simulator**.
 
-> a digital twin for software failure prediction.
-
-Users upload or define a simplified software architecture.
-
-The system:
-
-1. analyzes dependencies
-    
-2. generates AI-created outage scenarios
-    
-3. simulates cascading failures
-    
-4. visualizes infrastructure collapse
-    
-5. explains root causes using AI reasoning
-    
+1. **Upload:** Users define their architecture as a JSON-based Dependency Graph (Nodes and Edges).
+2. **Inject:** Users trigger a synthetic failure scenario on a specific Target Node.
+3. **Simulate:** The engine traverses the graph upstream, calculating degradation probabilities based on node types and edge dependencies.
+4. **Analyze:** AI reconstructs the failure path, assigns a Reliability Score, and provides mitigation strategies.
 
 ---
 
-# 6. Key Differentiators
+# 6. Core Features
 
-|Traditional Systems|BLACKOUT|
-|---|---|
-|predefined testing|AI-generated unknown scenarios|
-|static monitoring|dynamic failure simulation|
-|reactive debugging|predictive infrastructure intelligence|
-|isolated testing|cascading dependency reasoning|
-|rule-based systems|AI-native outage generation|
+### 6.1 Architecture Ingestion
+- Upload JSON graphs mapping microservices, databases, caches, and queues.
+- Define node types to dictate inherent failure characteristics (e.g., databases fail differently than stateless frontends).
 
----
+### 6.2 Scenario Generation
+- Predefined failure states: Latency Spike, Connection Drop, Complete Outage.
+- Target specific nodes to act as the "ground zero" of the simulation.
 
-# 7. Core Features
+### 6.3 Deterministic Cascade Engine
+- Breadth-First Search (BFS) graph traversal.
+- Calculates cascading state transitions: `HEALTHY` -> `STRESSED` -> `DEGRADED` -> `FAILED`.
+- Models retry storms and timeout exhaustion on upstream dependents.
 
----
-
-# 7.1 Infrastructure Graph Engine
-
-## Description
-
-Interactive visualization of system architecture and dependencies.
+### 6.4 Root Cause Analysis & Scoring
+- Reconstructs the exact chain of events that led to a specific node failing.
+- Generates a Reliability Score (0-100) based on Blast Radius and Outage Severity.
+- Provides actionable recommendations (e.g., "Add a Circuit Breaker to the API Gateway").
 
 ---
 
-## Functionalities
+# 7. User Flow
 
-- visualize services and dependencies
-    
-- represent APIs, databases, queues, caches, frontend systems
-    
-- display live infrastructure state changes
-    
-- animate traffic and failure propagation
-    
+1. **Architecture Upload:** POST `/v1/architectures` with the JSON graph.
+2. **Scenario Selection:** Define the target node and failure severity.
+3. **Simulation Execution:** POST `/v1/simulations` to trigger the cascade calculation.
+4. **Observe Propagation:** Review the predicted Blast Radius and affected nodes.
+5. **AI Analysis:** POST `/v1/analysis` to generate the RCA and Resilience Insights.
+6. **Review Score:** Check the final Reliability Score and implement recommended architectural changes.
 
 ---
 
-## UI Requirements
-
-- interactive graph canvas
-    
-- node-based infrastructure map
-    
-- live state coloring
-    
-- dependency edge animations
-    
-- zoom/pan support
-    
-
----
-
-## Suggested Technologies
-
-- React Flow
-    
-- Cytoscape.js
-    
-- D3.js
-    
-
----
-
-# 7.2 AI Outage Scenario Generator
-
-## Description
-
-AI dynamically generates synthetic outage conditions.
-
----
-
-## Supported Scenario Types
-
-- traffic spikes
-    
-- retry storms
-    
-- authentication overloads
-    
-- queue congestion
-    
-- cache failures
-    
-- API dependency failures
-    
-- rage-click user behavior
-    
-- malicious traffic bursts
-    
-- memory leaks
-    
-- cascading service outages
-    
-
----
-
-## Key Innovation
-
-Scenarios are dynamically generated using AI instead of replaying predefined tests.
-
----
-
-## Functional Requirements
-
-- user-triggered simulations
-    
-- random chaos generation
-    
-- scenario parameterization
-    
-- AI-generated stress logic
-    
-
----
-
-# 7.3 Cascade Failure Simulation Engine
-
-## Description
-
-Simulates how infrastructure failures propagate through interconnected systems.
-
----
-
-## Example Flow
-
-Traffic spike →  
-authentication slowdown →  
-queue congestion →  
-database overload →  
-platform collapse
-
----
-
-## Core Responsibilities
-
-- propagate failure states
-    
-- simulate service degradation
-    
-- model dependency stress
-    
-- animate infrastructure collapse
-    
-- display cascading effects in real time
-    
-
----
-
-## Visual Simulation Requirements
-
-- node overheating
-    
-- progressive red-state propagation
-    
-- edge pulse animations
-    
-- infrastructure destabilization
-    
-- latency indicators
-    
-- queue saturation effects
-    
-
----
-
-# 7.4 AI Failure Analysis Engine
-
-## Description
-
-AI analyzes simulation outcomes and explains failure causes.
-
----
-
-## AI Analysis Capabilities
-
-- identify bottlenecks
-    
-- explain collapse chains
-    
-- detect dependency risks
-    
-- analyze resilience weaknesses
-    
-- summarize outage causes
-    
-
----
-
-## Example Output
-
-> “Authentication retry storms amplified queue congestion, resulting in database saturation.”
-
----
-
-## Optional Recommendations
-
-- rate limiting
-    
-- caching
-    
-- queue isolation
-    
-- circuit breakers
-    
-- load balancing
-    
-
----
-
-# 7.5 Reliability Scoring Dashboard
-
-## Description
-
-Provides simplified resilience metrics after simulation.
-
----
-
-## Metrics
-
-- resilience score
-    
-- scalability score
-    
-- outage severity
-    
-- bottleneck index
-    
-- affected systems count
-    
-
----
-
-## UI Goals
-
-- visually simple
-    
-- quickly understandable
-    
-- demo-friendly
-    
-- non-cluttered
-    
-
----
-
-# 8. User Flow
-
----
-
-# Step 1 — Architecture Input
-
-User:
-
-- uploads architecture JSON  
-    OR
-    
-- selects predefined architecture template
-    
-
----
-
-# Step 2 — Scenario Selection
-
-User chooses:
-
-- predefined outage scenario  
-    OR
-    
-- AI-generated random chaos
-    
-
----
-
-# Step 3 — Simulation Execution
-
-BLACKOUT:
-
-- begins stress simulation
-    
-- propagates failures
-    
-- updates graph dynamically
-    
-
----
-
-# Step 4 — Infrastructure Collapse Visualization
-
-Users observe:
-
-- overloaded services
-    
-- cascading failures
-    
-- dependency chain breakdowns
-    
-
----
-
-# Step 5 — AI Analysis
-
-AI explains:
-
-- root causes
-    
-- bottlenecks
-    
-- collapse triggers
-    
-- weak dependencies
-    
-
----
-
-# Step 6 — Reliability Results
-
-Dashboard displays:
-
-- resilience score
-    
-- severity metrics
-    
-- outage summary
-    
-
----
-
-# 9. MVP Scope
-
-## MVP Goal
-
-Deliver a visually compelling AI-powered outage simulation prototype.
-
----
+# 8. MVP Scope
 
 ## MUST HAVE
+- JSON Architecture ingestion and validation.
+- Graph-based deterministic failure simulation algorithm.
+- Core simulation states (Healthy, Stressed, Degraded, Failed).
+- Reliability Scoring metrics based on Blast Radius.
+- Markdown CMS for comprehensive documentation.
 
-- infrastructure graph visualization
-    
-- AI outage generation
-    
-- cascading failure animation
-    
-- AI reasoning panel
-    
-- reliability dashboard
-    
-
----
-
-## SHOULD HAVE
-
-- multiple scenario templates
-    
-- playback controls
-    
-- simulation timeline
-    
+## OUT OF SCOPE
+- Live Kubernetes cluster management.
+- Real cloud orchestration or AWS integration.
+- Live traffic monitoring or real network packet dropping.
+- Chatbots or conversational debugging assistants.
 
 ---
 
-## OPTIONAL
+# 9. Technical Architecture
 
-- architecture import parser
-    
-- historical simulation comparison
-    
-- multi-scenario testing
-    
+## Frontend
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS + Radix UI
+- **Documentation:** File-based Markdown CMS (`gray-matter` + `react-markdown`)
 
----
-
-# 10. Out of Scope
-
-The MVP will NOT include:
-
-- real cloud orchestration
-    
-- Kubernetes integration
-    
-- production monitoring
-    
-- distributed infrastructure deployment
-    
-- real traffic generation
-    
-- enterprise authentication systems
-    
-- multi-user collaboration
-    
+## Backend / Core Engine
+- **Framework:** Node.js / TypeScript (or Python/FastAPI)
+- **Logic:** Graph algorithms (BFS) for dependency traversal and cascade probability calculations.
+- **AI Integration:** OpenAI API for dynamic Root Cause Analysis and Insight generation based on simulation logs.
 
 ---
 
-# 11. Design Requirements
-
-## Design Philosophy
-
-BLACKOUT should feel:
-
-- cinematic
-    
-- futuristic
-    
-- alive
-    
-- cyber-infrastructure-grade
-    
-
----
-
-## Avoid
-
-- spreadsheet-like dashboards
-    
-- enterprise clutter
-    
-- static monitoring interfaces
-    
-- overly technical UX
-    
-
----
-
-## Visual Inspirations
-
-- observability systems
-    
-- digital twins
-    
-- cyberpunk interfaces
-    
-- infrastructure simulation systems
-    
-
----
-
-# 12. Technical Architecture
-
----
-
-# Frontend
-
-## Technologies
-
-- React
-    
-- TailwindCSS
-    
-- React Flow / Cytoscape.js
-    
-
----
-
-## Responsibilities
-
-- graph visualization
-    
-- animation rendering
-    
-- dashboard UI
-    
-- simulation playback
-    
-
----
-
-# Backend
-
-## Preferred Stack
-
-- FastAPI
-    
-
-Alternative:
-
-- Node.js
-    
-
----
-
-## Responsibilities
-
-- simulation orchestration
-    
-- architecture parsing
-    
-- event propagation
-    
-- AI coordination
-    
-
----
-
-# AI Layer
-
-## Models
-
-- OpenAI GPT-4o
-    
-- Anthropic Claude
-    
-
----
-
-## AI Responsibilities
-
-- outage generation
-    
-- failure reasoning
-    
-- bottleneck prediction
-    
-- synthetic behavior modeling
-    
-
----
-
-# Simulation Layer
-
-## Responsibilities
-
-- state propagation
-    
-- dependency modeling
-    
-- timed event chains
-    
-- synthetic traffic simulation
-    
-
----
-
-# 13. Success Metrics
-
-## Product Metrics
-
-- simulation completion rate
-    
-- user engagement with simulations
-    
-- perceived realism of outage behavior
-    
-- clarity of AI explanations
-    
-
----
-
-## Hackathon Success Metrics
-
-- demo memorability
-    
-- visual impact
-    
-- AI integration strength
-    
-- technical storytelling
-    
-- uniqueness of concept
-    
-
----
-
-# 14. Risks
-
-|Risk|Mitigation|
-|---|---|
-|Overengineering backend|prioritize simulation UX|
-|Becoming generic dashboard|emphasize cinematic simulations|
-|Weak AI integration|make AI central to scenario generation|
-|Poor visualization clarity|focus heavily on graph animations|
-|Scope explosion|limit MVP strictly|
-
----
-
-# 15. Winning Strategy
+# 10. Winning Strategy
 
 BLACKOUT wins through:
-
-- cinematic infrastructure collapse simulations
-    
-- AI-native outage generation
-    
-- visually memorable storytelling
-    
-- futuristic system intelligence
-    
-- strong differentiation from generic AI tools
-    
-
----
-
-# 16. Final Product Definition
-
-BLACKOUT is:
-
-> an AI-native software failure simulation engine that predicts how modern software ecosystems collapse under real-world chaos before deployment.
-
-It is NOT:
-
-- a chatbot
-    
-- a monitoring platform
-    
-- a debugging assistant
-    
-- a DevOps dashboard
-    
-
-The core product is:
-
-> AI-generated synthetic outage simulation and cascading infrastructure failure prediction.
+- Providing a safe, mathematical alternative to dangerous live chaos engineering.
+- Focusing purely on actionable, structural insights rather than generic monitoring.
+- High-quality, developer-centric API documentation (Stripe/Vercel tier).
+- An explicit rejection of "fake enterprise complexity" in favor of a functional, predictive simulation MVP.

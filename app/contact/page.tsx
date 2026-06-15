@@ -5,7 +5,7 @@ import { Footer } from "@/components/landing/footer"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { MessageSquare, Handshake, Terminal, Lightbulb, ExternalLink, Github, Twitter, Linkedin } from "lucide-react"
+import { MessageSquare, Handshake, Terminal, Lightbulb, ExternalLink, Github, Linkedin } from "lucide-react"
 
 export default function ContactPage() {
   return (
@@ -136,13 +136,10 @@ export default function ContactPage() {
             <div>
               <h3 className="text-sm font-mono text-muted-foreground uppercase tracking-widest mb-6">Community</h3>
               <div className="flex items-center gap-4">
-                <Link href="#" className="p-3 rounded-lg border border-border/50 bg-card/30 hover:bg-card hover:border-border transition-all text-muted-foreground hover:text-foreground">
+                <Link href="https://github.com/Adityarane012/Blackout" target="_blank" className="p-3 rounded-lg border border-border/50 bg-card/30 hover:bg-card hover:border-border transition-all text-muted-foreground hover:text-foreground">
                   <Github className="w-5 h-5" />
                 </Link>
-                <Link href="#" className="p-3 rounded-lg border border-border/50 bg-card/30 hover:bg-card hover:border-border transition-all text-muted-foreground hover:text-foreground">
-                  <Twitter className="w-5 h-5" />
-                </Link>
-                <Link href="#" className="p-3 rounded-lg border border-border/50 bg-card/30 hover:bg-card hover:border-border transition-all text-muted-foreground hover:text-foreground">
+                <Link href="https://www.linkedin.com/in/aditya-rane-" target="_blank" className="p-3 rounded-lg border border-border/50 bg-card/30 hover:bg-card hover:border-border transition-all text-muted-foreground hover:text-foreground">
                   <Linkedin className="w-5 h-5" />
                 </Link>
               </div>

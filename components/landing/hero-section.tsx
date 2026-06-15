@@ -162,13 +162,16 @@ export function HeroSection() {
               Launch Simulator
             </Button>
           </Link>
-          <Button
-            size="lg"
-            variant="outline"
-            className="px-8 font-semibold border-border/50 bg-transparent hover:bg-secondary/50 transition-all rounded-full h-12 group"
-          >
-            Read Docs <ChevronRight className="ml-2 w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-          </Button>
+          <Link href="/docs/getting-started/introduction" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded-full">
+            <Button
+              size="lg"
+              variant="outline"
+              tabIndex={-1}
+              className="px-8 font-semibold border-border/50 bg-transparent hover:bg-secondary/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:border-cyan-500/30 transition-all duration-300 rounded-full h-12 group"
+            >
+              Read Docs <ChevronRight className="ml-2 w-4 h-4 text-muted-foreground group-hover:text-cyan-400 group-hover:translate-x-1 transition-all duration-300" />
+            </Button>
+          </Link>
         </motion.div>
 
         {/* Massive Network Visual */}

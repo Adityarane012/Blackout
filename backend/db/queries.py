@@ -81,3 +81,14 @@ WITH DISTINCT n
 WHERE n.id <> $root_id
 RETURN n { .id, .label, .type, .status, .load, .capacity, .latency, .error_rate } AS affected_node
 """
+
+# 6. Bottleneck Analysis
+# Identifies nodes with high in-degree dependencies (Critical dependency hubs)
+GET_BOTTLENECK_ANALYSIS_CYPHER = """
+MATCH (n:InfraNode)<-[r:DEPENDS_ON]-(dependent:InfraNode)
+WITH n, count(r) AS in_degree, collect(dependent.id) as dependent_ids
+WHERE in_degree > 0
+RETURN n { .id, .label, .type } AS node, in_degree, dependent_ids
+ORDER BY in_degree DESC
+LIMIT 10
+"""

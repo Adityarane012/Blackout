@@ -1,135 +1,128 @@
+import uuid
 from fastapi import FastAPI, Depends, HTTPException
 from typing import Dict, Any, List
+
 from backend.db.neo4j import neo4j_manager
 from backend.dependencies import get_graph_service
-from backend.graph_service import GraphService
-from backend.models.graph import NodeModel, DependencyModel
+from backend.services.graph_service import GraphService
+from backend.models.architecture import ArchitectureUploadModel
+from backend.services.validation_service import validate_architecture
+from backend.services.scenario_service import ScenarioService
+from backend.services.simulation_engine import SimulationEngine
+from backend.services.reliability_service import ReliabilityService
+from backend.services.analysis_service import AnalysisService
 
 app = FastAPI(
-    title="BLACKOUT - Neo4j SRE Graph Backend",
-    description="FastAPI ingestion and cascade propagation analysis engine powered by Neo4j.",
+    title="BLACKOUT - Simulation Engine API",
+    description="Deterministic Graph Simulation API",
     version="1.0.0"
 )
 
+# In-memory store for simulation results (for prototype)
+simulations_db = {}
+
 @app.on_event("startup")
 def startup_event():
-    """
-    Establish Neo4j connection pool on service initialization.
-    """
     try:
         neo4j_manager.connect()
     except Exception as e:
-        print(f"Error during backend startup connection pool initialize: {e}")
+        print(f"Error connecting to Neo4j: {e}")
 
 @app.on_event("shutdown")
 def shutdown_event():
-    """
-    Safely release and dispose of Neo4j driver pools on service shutdown.
-    """
     neo4j_manager.close()
 
-@app.get("/health", tags=["Telemetry"])
-def health_check():
-    """
-    Returns connection status verification for SRE monitor gates.
-    """
-    try:
-        driver = neo4j_manager.get_driver()
-        driver.verify_connectivity()
-        return {"status": "healthy", "neo4j": "connected"}
-    except Exception as e:
-        raise HTTPException(
-            status_code=503, 
-            detail=f"Neo4j link connection unhealthy: {str(e)}"
-        )
-
-@app.get("/topology", response_model=Dict[str, Any], tags=["Grid Operations"])
-def get_grid_topology(service: GraphService = Depends(get_graph_service)):
-    """
-    Fetches the complete dynamic grid network mapping nodes and connections from Neo4j.
-    """
-    return service.get_topology()
-
-@app.post("/nodes", response_model=Dict[str, Any], tags=["Grid Operations"])
-def upsert_node(
-    node: NodeModel,
-    service: GraphService = Depends(get_graph_service)
+@app.post("/v1/architectures", tags=["Architecture"])
+def upload_architecture(
+    upload: ArchitectureUploadModel,
+    graph_service: GraphService = Depends(get_graph_service)
 ):
-    """
-    Registers or updates an active SRE node entity (Service, Database, Queue, Cache, API, Frontend).
-    """
-    try:
-        return service.create_infra_node(node)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    nodes = upload.graph.get("nodes", [])
+    edges = upload.graph.get("edges", [])
+    
+    # Phase 0: Validate
+    validation = validate_architecture(nodes, edges)
+    if not validation.valid:
+        raise HTTPException(status_code=400, detail={"errors": validation.warnings})
+        
+    # Phase 1/2: Persist to Neo4j
+    graph_service.load_architecture(nodes, edges)
+    
+    return {
+        "id": str(uuid.uuid4()),
+        "valid": True,
+        "warnings": validation.warnings,
+        "graph_health_score": validation.graph_health_score
+    }
 
-@app.post("/dependencies", response_model=Dict[str, Any], tags=["Grid Operations"])
-def link_dependency(
-    dep: DependencyModel,
-    service: GraphService = Depends(get_graph_service)
+@app.get("/v1/architectures", tags=["Architecture"])
+def get_architectures(graph_service: GraphService = Depends(get_graph_service)):
+    # Returns current topology
+    return graph_service.get_topology()
+
+@app.get("/v1/scenarios", tags=["Scenarios"])
+def get_scenarios():
+    svc = ScenarioService()
+    return svc.get_all_scenarios()
+
+@app.post("/v1/simulations", tags=["Simulation"])
+def run_simulation(
+    trigger: Dict[str, Any],
+    graph_service: GraphService = Depends(get_graph_service)
 ):
-    """
-    Creates or registers an active directed traffic flow dependency link between two nodes.
-    """
-    try:
-        return service.create_dependency(dep)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    # Fetch latest topology from Neo4j
+    topology = graph_service.get_topology()
+    
+    # Run deterministic traversal
+    engine = SimulationEngine(topology)
+    result = engine.run_simulation(trigger)
+    
+    sim_id = str(uuid.uuid4())
+    simulations_db[sim_id] = result
+    
+    return {
+        "id": sim_id,
+        "timeline": result["timeline"],
+        "affectedNodes": result["affectedNodes"],
+        "blastRadius": result["blastRadius"]
+    }
 
-@app.post("/topology/bulk", response_model=Dict[str, Any], tags=["Grid Operations"])
-def bulk_import_topologies(
-    nodes: List[NodeModel],
-    dependencies: List[DependencyModel],
-    service: GraphService = Depends(get_graph_service)
+@app.post("/v1/analysis", tags=["Analysis"])
+def analyze_simulation(
+    payload: Dict[str, Any],
+    graph_service: GraphService = Depends(get_graph_service)
 ):
-    """
-    Atomically imports an entire SRE network grid with multiple nodes and dependencies.
-    """
-    try:
-        return service.bulk_import(nodes, dependencies)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.put("/nodes/{node_id}/telemetry", response_model=Dict[str, Any], tags=["Telemetry"])
-def update_node_telemetry(
-    node_id: str,
-    status: str,
-    load: float,
-    latency: float = 0.0,
-    error_rate: float = 0.0,
-    service: GraphService = Depends(get_graph_service)
-):
-    """
-    Pipes real-time load, status, and latency fluctuations directly to the Graph database.
-    """
-    try:
-        updated = service.update_node_status(node_id, status, load, latency, error_rate)
-        if not updated:
-            raise HTTPException(status_code=404, detail=f"Node {node_id} not found in grid topology.")
-        return updated
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.get("/nodes/{node_id}/blast-radius", response_model=List[Dict[str, Any]], tags=["Failover Analysis"])
-def trace_cascade_blast_radius(
-    node_id: str,
-    service: GraphService = Depends(get_graph_service)
-):
-    """
-    Queries Neo4j database to trace the full recursive upstream crash impact radius
-    in the event that the target node undergoes complete critical failure.
-    """
-    try:
-        return service.trace_cascade_blast_radius(node_id)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.delete("/topology", tags=["Grid Operations"])
-def purge_grid(service: GraphService = Depends(get_graph_service)):
-    """
-    Wipes the entire network topology from the graph database (Emergency Action).
-    """
-    try:
-        return {"success": service.reset_grid()}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    sim_id = payload.get("simulationId")
+    scenario = payload.get("scenario", "unknown_scenario")
+    
+    sim_data = simulations_db.get(sim_id)
+    if not sim_data:
+        # Fallback if no sim_id is provided or found
+        sim_data = {"timeline": [], "affectedNodes": [], "blastRadius": {}}
+        
+    # Bottleneck Analysis
+    bottlenecks = graph_service.analyze_bottlenecks()
+    
+    # Reliability Scoring
+    topology = graph_service.get_topology()
+    total_nodes = len(topology.get("nodes", []))
+    
+    rel_svc = ReliabilityService()
+    max_depth = len(sim_data["timeline"]) # Rough proxy for depth
+    score_data = rel_svc.calculate_score(
+        total_nodes=total_nodes,
+        affected_nodes=len(sim_data["affectedNodes"]),
+        max_depth=max_depth,
+        risk_score=bottlenecks["riskScore"]
+    )
+    
+    # AI Report Generation
+    ai_svc = AnalysisService()
+    report = ai_svc.generate_report(sim_data["timeline"], bottlenecks, scenario)
+    
+    return {
+        "reliabilityScore": score_data["reliabilityScore"],
+        "severity": score_data["severity"],
+        "criticalNodes": bottlenecks["criticalNodes"],
+        "report": report
+    }

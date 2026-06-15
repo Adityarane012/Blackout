@@ -71,6 +71,7 @@ export function LegalLayout({ title, lastUpdated, description, sections, childre
                   <a
                     key={section.id}
                     href={`#${section.id}`}
+                    onClick={() => setActiveSection(section.id)}
                     className={`text-sm py-1.5 px-3 rounded-md transition-colors ${
                       activeSection === section.id 
                         ? "bg-cyan-500/10 text-cyan-400 font-medium" 

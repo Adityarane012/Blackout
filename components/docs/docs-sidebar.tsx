@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-const navGroups = [
+export const navGroups = [
   {
     title: "Getting Started",
     links: [

@@ -8,9 +8,10 @@ interface PostMortemModalProps {
   onClose: () => void
   reportText: string
   isAnalyzing: boolean
+  score?: number
 }
 
-export function PostMortemModal({ isOpen, onClose, reportText, isAnalyzing }: PostMortemModalProps) {
+export function PostMortemModal({ isOpen, onClose, reportText, isAnalyzing, score }: PostMortemModalProps) {
   const [renderedReport, setRenderedReport] = useState("")
 
   // Typwriter effect for the report title/header to feel like a terminal output
@@ -34,6 +35,23 @@ export function PostMortemModal({ isOpen, onClose, reportText, isAnalyzing }: Po
             Secure connection established. Decrypting telemetry incident post-mortem analysis.
           </DialogDescription>
         </DialogHeader>
+
+        {!isAnalyzing && score !== undefined && (
+          <div className="flex items-center gap-4 px-1 py-2 border-b border-red-500/10">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-slate-400 font-mono uppercase">Reliability Score</span>
+              <span className={`text-2xl font-bold font-mono ${score < 50 ? 'text-red-500' : score < 80 ? 'text-orange-400' : 'text-green-400'}`}>
+                {score}/100
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] text-slate-400 font-mono uppercase">System Integrity</span>
+              <span className={`text-xs mt-1 px-2 py-0.5 rounded border font-mono ${score < 50 ? 'border-red-500/50 text-red-500 bg-red-500/10' : score < 80 ? 'border-orange-500/50 text-orange-400 bg-orange-500/10' : 'border-green-500/50 text-green-400 bg-green-500/10'}`}>
+                {score < 50 ? 'CRITICAL' : score < 80 ? 'DEGRADED' : 'STABLE'}
+              </span>
+            </div>
+          </div>
+        )}
 
         <div className="my-4 max-h-[450px] overflow-y-auto pr-2 font-mono text-sm leading-relaxed scrollbar-thin scrollbar-thumb-red-500/20 scrollbar-track-transparent">
           {isAnalyzing ? (

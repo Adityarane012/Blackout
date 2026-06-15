@@ -79,3 +79,49 @@ class GraphService:
         query = "MATCH (n:InfraNode) DETACH DELETE n"
         self.session.run(query)
         return True
+
+    def load_architecture(self, nodes: List[Dict[str, Any]], edges: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Clears the grid and loads a completely new validated architecture.
+        """
+        self.reset_grid()
+        node_models = [NodeModel(**n) for n in nodes]
+        # Map source/target to from_id/to_id
+        dep_models = []
+        for e in edges:
+            dep_models.append(DependencyModel(
+                from_id=e["source"],
+                to_id=e["target"],
+                status="active",
+                traffic=50.0,
+                latency=20.0
+            ))
+        return self.bulk_import(node_models, dep_models)
+
+    def analyze_bottlenecks(self) -> Dict[str, Any]:
+        """
+        Executes Neo4j Cypher queries to identify dependency hubs and critical nodes.
+        """
+        from backend.db.queries import GET_BOTTLENECK_ANALYSIS_CYPHER
+        result = self.session.run(GET_BOTTLENECK_ANALYSIS_CYPHER)
+        
+        critical_nodes = []
+        total_in_degree = 0
+        for rec in result:
+            critical_nodes.append({
+                "node": rec["node"],
+                "inDegree": rec["in_degree"],
+                "dependents": rec["dependent_ids"]
+            })
+            total_in_degree += rec["in_degree"]
+        
+        # Simple risk score based on the highest in-degree vs total
+        risk_score = 0
+        if critical_nodes:
+            max_degree = critical_nodes[0]["inDegree"]
+            risk_score = min(100, int((max_degree / max(1, total_in_degree)) * 100) + 20)
+            
+        return {
+            "criticalNodes": critical_nodes,
+            "riskScore": risk_score
+        }

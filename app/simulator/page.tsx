@@ -43,6 +43,7 @@ export default function SimulatorPage() {
     // AI and post-mortem states
     isAnalyzingPostMortem,
     postMortemReport,
+    postMortemScore,
     isPostMortemOpen,
     setIsPostMortemOpen,
     blastRadiusNodeIds,
@@ -122,6 +123,7 @@ export default function SimulatorPage() {
         onClose={() => setIsPostMortemOpen(false)}
         reportText={postMortemReport}
         isAnalyzing={isAnalyzingPostMortem}
+        score={postMortemScore}
       />
 
       {/* Custom System Architecture Ingestion Dialog */}
