@@ -37,11 +37,14 @@ export function LandingHeader() {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Features
           </Link>
-          <Link href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Pricing
+          </Link>
+          <Link href="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            Changelog
           </Link>
           <Link href="#docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Documentation

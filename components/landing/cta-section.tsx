@@ -79,23 +79,7 @@ export function CTASection() {
               </Button>
             </motion.div>
 
-            {/* Trust indicators */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="mt-12 pt-8 border-t border-border/30"
-            >
-              <p className="text-sm text-muted-foreground mb-4">Trusted by infrastructure teams at</p>
-              <div className="flex items-center justify-center gap-8 flex-wrap opacity-50">
-                {["ACME Corp", "TechFlow", "DataStream", "CloudScale", "NetOps"].map((company) => (
-                  <span key={company} className="text-sm font-mono text-muted-foreground tracking-wider">
-                    {company}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
+
           </div>
         </div>
       </motion.div>
