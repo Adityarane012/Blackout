@@ -1,0 +1,31 @@
+services:
+  neo4j:
+    image: neo4j:5.20.0
+    container_name: blackout_neo4j
+    ports:
+      # HTTP interface for the Neo4j Browser dashboard console
+      - "7474:7474"
+      # Bolt binary protocol port for the FastAPI backend driver
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_import:/import
+      - neo4j_plugins:/plugins
+    environment:
+      # Sets up credentials to match your .env values (neo4j / password)
+      - NEO4J_AUTH=neo4j/password
+      
+      # Preloads APOC core utilities used by the BLACKOUT Cypher queries for dynamic label mapping
+      - NEO4J_PLUGINS=["apoc"]
+      
+      # Allows dynamic procedure calls for APOC labels manipulation
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_dbms_security_procedures_allowlist=apoc.*
+    restart: always
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_import:
+  neo4j_plugins:
