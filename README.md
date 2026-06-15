@@ -23,6 +23,7 @@ However, testing for these explosive blast-radius events usually means deploying
 * 💥 **Deterministic State-Machine**: Systems organically shift state based on live queue load:
   $$\text{Healthy} \xrightarrow{\text{Load } \ge 75\%} \text{Stress} \xrightarrow{\text{Load } \ge 92\%} \text{Degraded} \xrightarrow{\text{Compounding Chance}} \text{Failure}$$
 * 🔧 **Custom Architecture Ingestion**: Instantly drop in a custom JSON microservice map and inject it into the simulator to test your *actual* infrastructure.
+* 🤖 **AI-Agent Optimized (Graphify)**: The entire codebase is continuously mapped into an AST knowledge graph (`graphify-out/`), allowing any AI coding assistant to instantly understand the complex full-stack architecture without exceeding token limits!
 * 😈 **Chaos Scenario Injection**: Trigger catastrophic events from the operator terminal:
   * *Traffic Surge*: Saturate CDN edges and routing pipelines like it's Black Friday.
   * *Database Failure*: Catastrophically drop core replicas and watch the cascade.
