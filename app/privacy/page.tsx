@@ -24,7 +24,7 @@ const privacySections = [
 export default function PrivacyPage() {
 
   const copyLink = (id: string) => {
-    const url = \`\${window.location.origin}\${window.location.pathname}#\${id}\`
+    const url = `${window.location.origin}${window.location.pathname}#${id}`
     navigator.clipboard.writeText(url)
   }
 
