@@ -1,30 +1,81 @@
-# Dependencies
-/node_modules
-/.pnpm-store
+# ========================================
+# BLACKOUT - Git Ignore Configuration
+# ========================================
+
+# ----------------------------------------
+# 1. Secrets & Environment Variables
+# ----------------------------------------
+# Ignore all environment files containing secrets.
+.env
+.env.*
+!.env.example
+
+# SSH and Keys
+*.pem
+*.key
+*.cert
+
+# ----------------------------------------
+# 2. Python & Backend
+# ----------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.pytest_cache/
+.mypy_cache/
+
+# ----------------------------------------
+# 3. Node.js & Frontend
+# ----------------------------------------
+node_modules/
+.pnpm-store/
+.npm/
 
 # Next.js Build Outputs
-/.next/
-/out/
-/dist/
+.next/
+out/
+dist/
+build/
 
 # TypeScript Cache
 *.tsbuildinfo
 
-# Debug logs
+# ----------------------------------------
+# 4. Databases & Storage
+# ----------------------------------------
+*.db
+*.sqlite3
+*.sqlite
+data/
+neo4j_data/
+
+# ----------------------------------------
+# 5. Graphify (AI Agent Knowledge Graph)
+# ----------------------------------------
+graphify-out/cache/
+graphify-out/.graphify_*
+graphify-out/*.json
+graphify-out/*.html
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/.graphify_uncached.txt
+
+# ----------------------------------------
+# 6. Logs & Debugging
+# ----------------------------------------
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+.coverage
 
-# Environment and sensitive variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env*.local
-
-# OS Metadata files
+# ----------------------------------------
+# 7. OS & IDE Metadata
+# ----------------------------------------
 .DS_Store
 .DS_Store?
 ._*
@@ -32,7 +83,6 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# IDEs and Editors
 .vscode/
 .idea/
 *.suo
@@ -44,50 +94,9 @@ Desktop.ini
 .project
 .settings/
 
-# V0 Sandbox internal files
-__v0_runtime_loader.js
-__v0_devtools.tsx
-__v0_jsx-dev-runtime.ts
-.snowflake/
-.v0-trash/
-.vercel/
-
-# Testing
-/coverage
-.nyc_output
-.eslintcache
-
-# Graphify Cache and Generated Outputs
-/graphify-out/cache/
-/graphify-out/.graphify_*
-/graphify-out/*.json
-/graphify-out/*.html
-/graphify-out/.graphify_python
-/graphify-out/.graphify_root
-/graphify-out/.graphify_uncached.txt
-
-# Project Status Update
-/for_creator_update.md
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-venv/
-.venv/
-env/
-.pytest_cache/
-
-# Databases and Local Storage
-*.db
-*.sqlite3
-*.sqlite
-/data/
-/neo4j_data/
-
-# Secrets and Keys
-*.pem
-*.key
-.env
-.env.*
-!.env.example
+# ----------------------------------------
+# 8. Private / Scratch Files
+# ----------------------------------------
+scratch*.py
+test*.py
+for_creator_update.md
