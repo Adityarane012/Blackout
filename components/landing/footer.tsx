@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Github, Twitter, Linkedin } from "lucide-react"
 
 export function Footer() {
   return (
@@ -33,9 +34,7 @@ export function Footer() {
             <ul className="space-y-3">
               {[
                 { name: "Documentation", href: "/docs" },
-                { name: "API Reference", href: "/docs/api" },
-                { name: "Status", href: "#" },
-                { name: "Blog", href: "#" }
+                { name: "API Reference", href: "/docs/api" }
               ].map((item) => (
                 <li key={item.name}>
                   <Link href={item.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -79,31 +78,25 @@ export function Footer() {
               ))}
             </ul>
           </div>
-
-          {/* Social */}
-          <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Social</h4>
-            <ul className="space-y-3">
-              {[
-                { name: "GitHub", href: "#" },
-                { name: "LinkedIn", href: "#" },
-                { name: "X", href: "#" }
-              ].map((item) => (
-                <li key={item.name}>
-                  <Link href={item.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 pt-8 border-t border-border/50 flex items-center justify-between">
+        <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} BLACKOUT. All rights reserved.
           </p>
+          
+          <div className="flex items-center gap-6">
+            <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Github className="w-5 h-5" />
+            </Link>
+            <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Twitter className="w-5 h-5" />
+            </Link>
+            <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Linkedin className="w-5 h-5" />
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
