@@ -44,10 +44,13 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4">Resources</h4>
             <ul className="space-y-3">
-              {["Documentation", "API Reference", "Status", "Blog"].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {item}
+              {[
+                { name: "Documentation", href: "/docs" },
+                { name: "API Reference", href: "/docs/api" }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link href={item.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    {item.name}
                   </Link>
                 </li>
               ))}
@@ -57,10 +60,13 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4">Company</h4>
             <ul className="space-y-3">
-              {["About", "Careers", "Contact", "Security"].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {item}
+              {[
+                { name: "About", href: "/about" },
+                { name: "Contact", href: "/contact" }
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link href={item.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    {item.name}
                   </Link>
                 </li>
               ))}

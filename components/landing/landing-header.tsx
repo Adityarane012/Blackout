@@ -2,9 +2,19 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
 export function LandingHeader() {
+  const pathname = usePathname()
+
+  const navLinks = [
+    { name: "Features", href: "/features" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "Changelog", href: "/changelog" },
+    { name: "Documentation", href: "/docs" }
+  ]
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
@@ -37,18 +47,18 @@ export function LandingHeader() {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Features
-          </Link>
-          <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Pricing
-          </Link>
-          <Link href="/changelog" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Changelog
-          </Link>
-          <Link href="#docs" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Documentation
-          </Link>
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href || pathname?.startsWith(`${link.href}/`)
+            return (
+              <Link 
+                key={link.name} 
+                href={link.href} 
+                className={`text-sm transition-colors ${isActive ? "text-cyan-400 font-medium" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {link.name}
+              </Link>
+            )
+          })}
         </nav>
 
         {/* CTA */}
