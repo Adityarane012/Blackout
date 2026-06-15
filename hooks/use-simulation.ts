@@ -48,7 +48,9 @@ export function useSimulation() {
 
   // Timeline fetched from backend
   const [playbackTimeline, setPlaybackTimeline] = useState<any[]>([])
+  const [failureChains, setFailureChains] = useState<any[]>([])
   const [simulationId, setSimulationId] = useState<string | null>(null)
+  const [intelligenceReport, setIntelligenceReport] = useState<any | null>(null)
 
   // AI & Post Mortem States
   const [isAnalyzingPostMortem, setIsAnalyzingPostMortem] = useState(false)
@@ -79,10 +81,9 @@ export function useSimulation() {
   }, [])
 
   const addEvent = useCallback((type: SimEvent["type"], message: string, nodeId?: string, force = false) => {
-    eventIdRef.current += 1
     setEvents((prev) => [
       ...prev.slice(-49),
-      { id: `event-${eventIdRef.current}`, timestamp: new Date(), type, message, nodeId },
+      { id: `event-${crypto.randomUUID()}`, timestamp: new Date(), type, message, nodeId },
     ])
   }, [])
 
@@ -140,7 +141,10 @@ export function useSimulation() {
           }
         })
       })
-      if (!archRes.ok) throw new Error("Graph validation failed");
+      if (!archRes.ok) {
+        const errText = await archRes.text();
+        throw new Error(`Failed to load architecture: ${errText}`);
+      }
       const archData = await archRes.json();
       archIdRef.current = archData.id;
       
@@ -155,9 +159,15 @@ export function useSimulation() {
         })
       })
       
+      if (!simRes.ok) {
+        const errText = await simRes.text();
+        throw new Error(`Simulation failed: ${errText}`);
+      }
+      
       const data = await simRes.json();
       setSimulationId(data.id);
       setPlaybackTimeline(data.timeline || []);
+      setFailureChains(data.failureChains || []);
       
     } catch (err) {
       console.error(err)
@@ -191,7 +201,10 @@ export function useSimulation() {
           }
         })
       })
-      if (!archRes.ok) throw new Error("Graph validation failed");
+      if (!archRes.ok) {
+        const errText = await archRes.text();
+        throw new Error(`Graph validation failed: ${errText}`);
+      }
       const archData = await archRes.json();
       archIdRef.current = archData.id;
       
@@ -208,9 +221,15 @@ export function useSimulation() {
         })
       })
       
+      if (!simRes.ok) {
+        const errText = await simRes.text();
+        throw new Error(`Targeted fault failed: ${errText}`);
+      }
+      
       const data = await simRes.json();
       setSimulationId(data.id);
       setPlaybackTimeline(data.timeline || []);
+      setFailureChains(data.failureChains || []);
     } catch (err) {
       console.error(err)
       addEvent("critical", "Simulation Engine Error: Failed to generate targeted timeline.")
@@ -230,6 +249,8 @@ export function useSimulation() {
     triggerSimulation("database_saturation", "db-1")
   }, [triggerSimulation])
 
+  const tickRef = useRef(0)
+
   // Playback Loop
   useEffect(() => {
     if (!isRunning || playbackTimeline.length === 0) {
@@ -238,28 +259,37 @@ export function useSimulation() {
     }
 
     const maxTick = Math.max(...playbackTimeline.map(ev => parseInt(ev.tick.replace("T+", ""))))
-    
     const tickMs = Math.max(MIN_TICK_MS, 1000 / speed)
+    
+    // Reset tick ref at start of playback if elapsed time is 0
+    if (elapsedTime === 0) {
+      tickRef.current = 0
+    }
+
     playbackIntervalRef.current = setInterval(() => {
-      setElapsedTime(prev => {
-        const nextTick = prev + 1
-        
-        // Find events for this tick
-        const tickEvents = playbackTimeline.filter(ev => ev.tick === `T+${nextTick-1}`)
+      const nextTick = tickRef.current + 1
+      tickRef.current = nextTick
+      
+      setElapsedTime(nextTick)
+
+      // Find events for this tick
+      const tickEvents = playbackTimeline.filter(ev => ev.tick === `T+${nextTick-1}`)
         if (tickEvents.length > 0) {
+          
+          let newFailed: string[] = []
+          let newStressed: string[] = []
+
+          tickEvents.forEach(ev => {
+            addEvent(ev.state === "FAILED" ? "critical" : ev.state === "STRESSED" ? "warning" : "info", ev.message, ev.nodeId, true)
+            
+            if (ev.state === "FAILED") newFailed.push(ev.nodeId)
+            if (ev.state === "STRESSED" || ev.state === "DEGRADED") newStressed.push(ev.nodeId)
+          })
+
           setNodes(currentNodes => {
             let updatedNodes = [...currentNodes]
-            
-            // For live analysis
-            let newFailed: string[] = []
-            let newStressed: string[] = []
 
             tickEvents.forEach(ev => {
-              addEvent(ev.state === "FAILED" ? "critical" : ev.state === "STRESSED" ? "warning" : "info", ev.message, ev.nodeId, true)
-              
-              if (ev.state === "FAILED") newFailed.push(ev.nodeId)
-              if (ev.state === "STRESSED" || ev.state === "DEGRADED") newStressed.push(ev.nodeId)
-
               updatedNodes = updatedNodes.map(n => {
                 if (n.id === ev.nodeId) {
                   const newStatus = ev.state.toLowerCase() as any
@@ -272,29 +302,35 @@ export function useSimulation() {
                 return n
               })
             })
-
-            // Update live analysis
-            setLiveAnalysis(prev => {
-              const rootCause = prev?.rootCause || (newFailed.length > 0 ? updatedNodes.find(n => n.id === newFailed[0])?.label : undefined)
-              const primaryImpact = prev?.primaryImpact || (newFailed.length > 1 ? updatedNodes.find(n => n.id === newFailed[1])?.label : (newStressed.length > 0 ? updatedNodes.find(n => n.id === newStressed[0])?.label : undefined))
-              const secondaryImpact = newStressed.length > 1 ? updatedNodes.find(n => n.id === newStressed[newStressed.length-1])?.label : prev?.secondaryImpact
-              
-              let recommendation = "Monitor system health."
-              if (rootCause && primaryImpact) {
-                 recommendation = `Introduce circuit breakers between ${rootCause} and ${primaryImpact}.`
-              } else if (rootCause) {
-                 recommendation = `Scale up redundancy for ${rootCause}.`
-              }
-
-              return {
-                rootCause,
-                primaryImpact: primaryImpact !== rootCause ? primaryImpact : undefined,
-                secondaryImpact: secondaryImpact !== primaryImpact ? secondaryImpact : undefined,
-                recommendation
-              }
-            })
-
+            
             return updatedNodes
+          })
+
+          // Update live analysis
+          setLiveAnalysis(prev => {
+            const rootCause = prev?.rootCause || (newFailed.length > 0 ? initialNodes.find(n => n.id === newFailed[0])?.label : undefined)
+            const primaryImpact = prev?.primaryImpact || (newFailed.length > 1 ? initialNodes.find(n => n.id === newFailed[1])?.label : (newStressed.length > 0 ? initialNodes.find(n => n.id === newStressed[0])?.label : undefined))
+            const secondaryImpact = newStressed.length > 1 ? initialNodes.find(n => n.id === newStressed[newStressed.length-1])?.label : prev?.secondaryImpact
+            
+            let recommendation = "Monitor system health."
+            if (rootCause && primaryImpact) {
+               recommendation = `Introduce circuit breakers between ${rootCause} and ${primaryImpact}.`
+            } else if (rootCause) {
+               recommendation = `Scale up redundancy for ${rootCause}.`
+            }
+
+            return {
+              rootCause,
+              primaryImpact: primaryImpact !== rootCause ? primaryImpact : undefined,
+              secondaryImpact: secondaryImpact !== primaryImpact ? secondaryImpact : undefined,
+              recommendation
+            }
+          })
+          
+          // Render Failure Chains as events
+          const chainsForTick = failureChains.filter(fc => fc.timestamp === `T+${nextTick-1}`)
+          chainsForTick.forEach(fc => {
+              addEvent("ai", `Failure Chain: ${fc.reason}`, fc.impact_node_id, true)
           })
           
           // Update connections visually
@@ -307,21 +343,20 @@ export function useSimulation() {
           })
         }
         
-        // End simulation if we passed max tick
-        if (nextTick > maxTick + 1) {
-           clearInterval(playbackIntervalRef.current!)
-           setIsRunning(false)
-           if (!isPostMortemGeneratedRef.current && simulationId) {
-             generatePostMortemReport(simulationId, currentScenario)
-           }
-        }
-        
-        return nextTick
-      })
+      // End simulation if we passed max tick
+      if (nextTick > maxTick + 1) {
+         clearInterval(playbackIntervalRef.current!)
+         setIsRunning(false)
+         if (!isPostMortemGeneratedRef.current && simulationId) {
+           generatePostMortemReport(simulationId, currentScenario)
+         }
+      }
     }, tickMs)
 
-    return () => clearInterval(playbackIntervalRef.current!)
-  }, [isRunning, playbackTimeline, speed, simulationId, currentScenario, generatePostMortemReport, addEvent])
+    return () => {
+      if (playbackIntervalRef.current) clearInterval(playbackIntervalRef.current)
+    }
+  }, [isRunning, playbackTimeline, speed, generatePostMortemReport, simulationId, currentScenario, addEvent, initialNodes])
 
   const resetSimulation = useCallback(() => {
     setIsRunning(false)
@@ -391,6 +426,15 @@ export function useSimulation() {
       isPostMortemGeneratedRef.current = false
       setPostMortemReport("")
       setIsPostMortemOpen(false)
+      
+      // Fetch Intelligence Scan
+      try {
+        const intelRes = await fetch(`/v1/intelligence/${archId}`)
+        if (intelRes.ok) {
+            setIntelligenceReport(await intelRes.json())
+        }
+      } catch(e) {}
+      
     } catch (err) {
       console.error(err)
       addEvent("critical", "Failed to load architecture from backend.")
@@ -450,6 +494,8 @@ export function useSimulation() {
     generatePostMortemReport: () => simulationId && generatePostMortemReport(simulationId, currentScenario),
     blastRadiusNodeIds,
     saveCurrentArchitecture,
-    liveAnalysis
+    liveAnalysis,
+    intelligenceReport,
+    failureChains
   }
 }

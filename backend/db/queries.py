@@ -93,6 +93,23 @@ ORDER BY in_degree DESC
 LIMIT 10
 """
 
+# 6b. V2 Intelligence Scans
+GET_SPOF_CYPHER = """
+MATCH (n:InfraNode {arch_id: $arch_id})<-[:DEPENDS_ON]-(d:InfraNode {arch_id: $arch_id})
+WITH n, count(d) as deps
+WHERE deps > 0
+MATCH (peers:InfraNode {arch_id: $arch_id, type: n.type})
+WITH n, deps, count(peers) as peer_count
+WHERE peer_count = 1
+RETURN n.id as node_id, n.label as label, n.type as type, deps as dependents_count
+"""
+
+GET_DEPTH_RISK_CYPHER = """
+MATCH path = (n:InfraNode {arch_id: $arch_id})-[:DEPENDS_ON*3..]->(target:InfraNode {arch_id: $arch_id})
+RETURN n.id as start_node, target.id as end_node, length(path) as depth
+ORDER BY depth DESC LIMIT 1
+"""
+
 # 7. User Persistence & History
 MERGE_USER_CYPHER = """
 MERGE (u:User {clerk_id: $clerk_id})

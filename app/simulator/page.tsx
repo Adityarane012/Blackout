@@ -10,6 +10,7 @@ import { EventLog } from "@/components/event-log"
 import { PostMortemModal } from "@/components/workspace/post-mortem-modal"
 import { ImportArchitectureModal } from "@/components/workspace/import-architecture-modal"
 import { InjectFaultModal } from "@/components/workspace/inject-fault-modal"
+import { IntelligenceModal } from "@/components/workspace/intelligence-modal"
 import { useSimulation } from "@/hooks/use-simulation"
 
 function SimulatorContent() {
@@ -18,6 +19,7 @@ function SimulatorContent() {
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false)
   const [isFaultModalOpen, setIsFaultModalOpen] = useState(false)
+  const [isIntelligenceModalOpen, setIsIntelligenceModalOpen] = useState(false)
   const [isAborting, setIsAborting] = useState(false)
 
   const handleAbortSimulation = useCallback(() => {
@@ -57,7 +59,15 @@ function SimulatorContent() {
     blastRadiusNodeIds,
     saveCurrentArchitecture,
     liveAnalysis,
+    intelligenceReport,
+    failureChains
   } = useSimulation()
+
+  useEffect(() => {
+    if (intelligenceReport) {
+      setIsIntelligenceModalOpen(true)
+    }
+  }, [intelligenceReport])
 
   useEffect(() => {
     if (archId) {
@@ -160,6 +170,13 @@ function SimulatorContent() {
         onClose={() => setIsFaultModalOpen(false)}
         nodes={nodes}
         onInject={triggerTargetedFault}
+      />
+
+      {/* Intelligence Risk Scan Modal */}
+      <IntelligenceModal
+        isOpen={isIntelligenceModalOpen}
+        onClose={() => setIsIntelligenceModalOpen(false)}
+        report={intelligenceReport}
       />
     </div>
   )

@@ -2,7 +2,7 @@ from typing import Generator
 from fastapi import Depends
 from neo4j import Session
 from backend.db.neo4j import neo4j_manager, Neo4jManager
-from backend.graph_service import GraphService
+from backend.services.graph_service import GraphService
 
 def get_neo4j_manager() -> Neo4jManager:
     """

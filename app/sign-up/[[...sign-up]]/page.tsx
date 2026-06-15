@@ -134,36 +134,16 @@ export default function SignUpPage() {
 
           <SignUp 
             appearance={{
-              baseTheme: dark,
               variables: {
                 colorPrimary: '#06b6d4',
                 colorBackground: 'transparent',
-                colorInputText: '#ffffff',
-              },
-              layout: {
-                socialButtonsPlacement: "bottom",
-              },
-              elements: {
-                rootBox: "w-full",
-                cardBox: "shadow-none",
-                card: "!bg-transparent shadow-none p-0 w-full",
-                headerTitle: "text-2xl font-bold tracking-tight text-foreground",
-                headerSubtitle: "text-muted-foreground mt-2",
-                socialButtonsBlockButton: "!bg-secondary/40 border border-border/50 hover:!bg-secondary/70 text-foreground transition-all duration-200 h-11",
-                socialButtonsBlockButtonText: "text-foreground font-medium",
-                dividerLine: "bg-border/50",
-                dividerText: "text-muted-foreground !bg-transparent px-3",
-                formFieldLabel: "text-foreground font-medium mb-1.5",
-                formFieldInput: "!bg-secondary/30 border border-border/50 focus:border-cyan-500/50 text-foreground h-11 transition-all duration-200 rounded-lg focus:ring-1 focus:ring-cyan-500/50",
-                formButtonPrimary: "!bg-cyan-500 hover:!bg-cyan-400 text-background font-semibold h-11 transition-all duration-200 rounded-lg shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:shadow-[0_0_25px_rgba(34,211,238,0.4)]",
-                footerActionText: "text-muted-foreground",
-                footerActionLink: "text-cyan-400 hover:text-cyan-300 font-medium",
-                identityPreviewText: "text-foreground",
-                identityPreviewEditButton: "text-cyan-400 hover:text-cyan-300",
-                formFieldSuccessText: "text-cyan-400",
-                formFieldErrorText: "text-red-400"
+                colorDanger: '#ef4444',
+                colorSuccess: '#22c55e',
+                colorWarning: '#f59e0b',
               }
             }}
+            routing="path" 
+            path="/sign-up" 
           />
         </div>
       </div>

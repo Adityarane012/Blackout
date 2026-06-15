@@ -33,10 +33,18 @@ class NodeModel(BaseModel):
     label: str = Field(..., description="Human-readable title displayed in the SRE dashboard")
     type: str = Field(..., description="Classification category (e.g. server, database, cache, api)")
     status: str = Field("healthy", description="Current SRE status flag: healthy, stress, degraded, failure")
+    
+    # Digital Twin Metrics
     load: float = Field(0.0, ge=0.0, le=100.0, description="Active system CPU/memory load percentage")
     capacity: float = Field(1000.0, ge=0.0, description="Maximum throughput processing capacity limit")
-    latency: float = Field(0.0, ge=0.0, description="Active processing latency metric in milliseconds")
+    
+    cpu_utilization: float = Field(0.0, ge=0.0, le=100.0, description="CPU Utilization %")
+    memory_utilization: float = Field(0.0, ge=0.0, le=100.0, description="Memory Utilization %")
+    network_throughput: float = Field(0.0, ge=0.0, description="Network throughput in MB/s")
+    request_rate: float = Field(0.0, ge=0.0, description="Current incoming requests per second")
+    queue_depth: float = Field(0.0, ge=0.0, description="Number of items currently queued")
     error_rate: float = Field(0.0, ge=0.0, le=1.0, description="Telemetry transaction error rate fraction (0.0 to 1.0)")
+    latency: float = Field(0.0, ge=0.0, description="Active processing latency metric in milliseconds")
 
     class Config:
         from_attributes = True
@@ -62,3 +70,13 @@ class DependencyModel(BaseModel):
 
     class Config:
         from_attributes = True
+
+class FailureChainModel(BaseModel):
+    """
+    Tracks the specific causal link explaining why a cascade occurred.
+    """
+    cause_node_id: str
+    trigger_metric: str
+    impact_node_id: str
+    reason: str
+    timestamp: str

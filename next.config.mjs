@@ -15,10 +15,12 @@ const nextConfig = {
     unoptimized: true,
   },
   async rewrites() {
+    // In production, set BACKEND_URL to your Render/Railway URL (e.g. https://blackout-api.onrender.com)
+    const backendUrl = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
     return [
       {
         source: '/v1/:path*',
-        destination: 'http://127.0.0.1:8000/v1/:path*'
+        destination: `${backendUrl}/v1/:path*` // Proxy to Backend
       }
     ]
   }

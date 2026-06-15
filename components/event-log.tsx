@@ -5,9 +5,15 @@ import { useEffect, useState, useRef } from "react"
 interface Event {
   id: string
   timestamp: Date
-  type: "info" | "warning" | "critical" | "ai"
+  type: "info" | "warning" | "critical" | "ai" | "chain"
   message: string
   nodeId?: string
+  chain?: {
+    cause_node_id: string
+    trigger_metric: string
+    impact_node_id: string
+    reason: string
+  }
 }
 
 interface EventLogProps {
@@ -68,37 +74,61 @@ export function EventLog({ events }: EventLogProps) {
 }
 
 function EventItem({ event }: { event: Event }) {
-  const typeStyles = {
-    info: "border-l-cyan-400 text-cyan-400",
-    warning: "border-l-orange-400 text-orange-400",
-    critical: "border-l-red-400 text-red-400",
-    ai: "border-l-purple-500 text-purple-400",
-  }
-
-  const typeIcons = {
-    info: "●",
-    warning: "▲",
-    critical: "✕",
-    ai: "◆",
+  const getTypeColor = (type: Event['type']) => {
+    const styles = {
+      info: "border-cyan-400/30 text-cyan-400",
+      warning: "border-orange-400/30 text-orange-400",
+      critical: "border-red-400/30 text-red-400",
+      ai: "border-purple-500/30 text-purple-400",
+      chain: "border-yellow-500/30 text-yellow-400",
+    }
+    return styles[type]
   }
 
   return (
-    <div className={`border-l-2 ${typeStyles[event.type].split(" ")[0]} bg-secondary/20 rounded-r px-3 py-2`}>
-      <div className="flex items-start gap-2">
-        <span className={`text-xs ${typeStyles[event.type].split(" ")[1]}`}>{typeIcons[event.type]}</span>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-[9px] font-mono text-muted-foreground">
-              {event.timestamp.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+    <div className={`border-l-2 ${getTypeColor(event.type).split(" ")[0]} bg-secondary/20 rounded-r px-3 py-2`}>
+      <div className="flex flex-col">
+        <div className="flex items-center gap-2 mb-1">
+          <span className={`text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded border ${getTypeColor(event.type)}`}>
+            {event.type}
+          </span>
+          {event.nodeId && (
+            <span className="text-[10px] font-mono text-muted-foreground border border-border/50 px-1.5 py-0.5 rounded">
+              NODE: {event.nodeId}
             </span>
-            {event.nodeId && (
-              <span className="text-[9px] font-mono px-1.5 py-0.5 bg-secondary rounded text-muted-foreground">
-                {event.nodeId}
-              </span>
-            )}
-          </div>
-          <p className="text-xs font-mono text-foreground/80 leading-relaxed break-words">{event.message}</p>
+          )}
+          <span className="text-[10px] font-mono text-muted-foreground ml-auto opacity-50">
+            {event.timestamp.toLocaleTimeString(undefined, {
+              hour12: false,
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              fractionalSecondDigits: 2,
+            })}
+          </span>
         </div>
+        
+        {event.chain ? (
+          <div className="mt-1.5 bg-background/50 border border-border/30 rounded p-2 text-[11px] font-mono space-y-1">
+            <div className="flex items-center gap-2">
+                <span className="text-muted-foreground">Cause:</span>
+                <span className="text-red-400">{event.chain.cause_node_id}</span>
+            </div>
+            <div className="flex items-center gap-2">
+                <span className="text-muted-foreground">Trigger Metric:</span>
+                <span className="text-orange-400 uppercase">{event.chain.trigger_metric}</span>
+            </div>
+            <div className="flex items-center gap-2">
+                <span className="text-muted-foreground">Impact:</span>
+                <span className="text-cyan-400">{event.chain.impact_node_id}</span>
+            </div>
+            <div className="text-foreground/80 pt-1 border-t border-border/30 mt-1">
+                &quot;{event.chain.reason}&quot;
+            </div>
+          </div>
+        ) : (
+          <p className="text-xs font-mono text-foreground/90 leading-relaxed mt-1">{event.message}</p>
+        )}
       </div>
     </div>
   )

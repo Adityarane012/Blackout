@@ -30,7 +30,7 @@ def validate_architecture(nodes: List[Dict[str, Any]], edges: List[Dict[str, Any
         node_ids.add(node_id)
 
     # 3. Invalid node types
-    valid_types = {"frontend", "service", "database", "queue", "cache", "external"}
+    valid_types = {"frontend", "service", "database", "queue", "cache", "external", "cdn", "loadbalancer", "api", "server"}
     for n in nodes:
         n_type = n.get("type", "").lower()
         if n_type not in valid_types:

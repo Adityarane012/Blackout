@@ -34,6 +34,7 @@ export function PlaybackTimeline({ events, isRunning, elapsedTime }: PlaybackTim
     warning: "bg-orange-500",
     critical: "bg-red-500",
     ai: "bg-purple-500",
+    chain: "bg-yellow-400"
   }
 
   return (

@@ -210,6 +210,23 @@ export function WorkspaceHeader({
 
       {/* Right - Status Indicators */}
       <div className="flex items-center gap-4">
+        {/* Demo Mode Button */}
+        <button
+          onClick={() => {
+            const demoScenario = SCENARIOS.find(s => s.id === "black_friday_traffic");
+            if (demoScenario) {
+              onScenarioChange(demoScenario);
+            }
+          }}
+          className="flex items-center gap-2 px-3 py-1.5 bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/30 hover:border-yellow-500/50 rounded-lg text-yellow-400 font-mono text-xs uppercase tracking-wider transition-all duration-200 group"
+        >
+          <svg className="w-3.5 h-3.5 text-yellow-400/80 group-hover:text-yellow-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Demo Mode</span>
+        </button>
+
         {/* Ingest Architecture Button */}
         <button
           onClick={onOpenImport}
