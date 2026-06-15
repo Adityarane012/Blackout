@@ -1,11 +1,18 @@
-"use client"
-
 import { DocsHeader } from "@/components/docs/docs-header"
 import { DocsSidebar } from "@/components/docs/docs-sidebar"
 import { DocsTOC } from "@/components/docs/docs-toc"
 import { DocsContent } from "@/components/docs/docs-content"
+import { getDocBySlug } from "@/lib/docs"
+import { notFound } from "next/navigation"
 
-export default function DocsPage() {
+export default async function DocsPage({ params }: { params: { slug?: string[] } }) {
+  const slug = params.slug || []
+  const doc = getDocBySlug(slug)
+
+  if (!doc) {
+    notFound()
+  }
+
   return (
     <div className="relative min-h-screen bg-background text-foreground flex flex-col selection:bg-cyan-500/30">
       
@@ -20,15 +27,15 @@ export default function DocsPage() {
       <div className="flex flex-1 w-full max-w-[1600px] mx-auto relative z-10">
         
         {/* Left Sidebar Navigation */}
-        <DocsSidebar />
+        <DocsSidebar currentSlug={slug} />
 
         {/* Center Content Area */}
         <main className="flex-1 lg:pl-64 xl:pr-64 min-w-0">
-          <DocsContent />
+          <DocsContent doc={doc} />
         </main>
 
         {/* Right Sidebar TOC */}
-        <DocsTOC />
+        <DocsTOC headings={doc.headings} />
 
       </div>
     </div>
